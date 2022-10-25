@@ -44,9 +44,9 @@ input {
 .login-title {
   color: rgb(82, 47, 38);
   font-size: 3em;
+  font-weight: 600;
   margin: 20px 0;
   text-transform: uppercase;
-  font-weight: 600;
 }
 
 .text-input {

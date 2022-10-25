@@ -5,9 +5,9 @@ import MyContext from '../context/MyContext';
 function Login({ history }) {
   const { handleChange, isDisabled, submitLogin } = useContext(MyContext);
 
-  const teste = () => {
+  const redirectTo = (pathname) => {
     submitLogin();
-    history.push('/meals');
+    history.push(pathname);
   };
 
   return (
@@ -41,7 +41,7 @@ function Login({ history }) {
           type="button"
           disabled={ isDisabled }
           data-testid="login-submit-btn"
-          onClick={ teste }
+          onClick={ () => redirectTo('/meals') }
         >
           Enviar
         </button>

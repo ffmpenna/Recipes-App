@@ -17,7 +17,6 @@ function Provider({ children }) {
     const number = 6;
     const verifyUser = inputPassword.length > number;
     toggleButton(!(verifyEmail && verifyUser));
-    console.log(!(verifyEmail && verifyUser));
   }, [loginInfo]);
 
   const handleChange = useCallback(

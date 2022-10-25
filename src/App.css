@@ -86,7 +86,8 @@ body {
 }
 
 input {
-  border: #1e293b 1px solid;
+  border-bottom: #1e293b 1px solid;
+  color: #0d172a;
 }
 
 .login-container {
@@ -166,4 +167,15 @@ input {
 .button:disabled:hover {
   background-color: rgb(240, 240, 240);
   color: #bebebe;
+}
+
+.header-container {
+  background-color: #f95;
+}
+
+.header-content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 50px;
 }

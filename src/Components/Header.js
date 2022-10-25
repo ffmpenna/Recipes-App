@@ -8,32 +8,34 @@ function Header({ title, notSearch }) {
   const [isSearchInputShow, toggleSearchInput] = useState(false);
 
   return (
-    <div>
-      <Link to="/profile">
-        <button data-testid="profile-top-btn" type="button" src={ profileIcon }>
-          <img src={ profileIcon } alt="profile-icon" />
-        </button>
-      </Link>
-      {!notSearch && (
-        <button
-          data-testid="search-top-btn"
-          type="button"
-          src={ searchIcon }
-          onClick={ () => toggleSearchInput(!isSearchInputShow) }
-        >
-          <img src={ searchIcon } alt="search-icon" />
-        </button>
-      )}
-
-      {isSearchInputShow && (
-        <input
-          type="text"
-          placeholder="Pesquise aqui"
-          data-testid="search-input"
-        />
-      )}
-
-      <h1 data-testid="page-title">{title}</h1>
+    <div className="header-container">
+      <header className="header-content">
+        <Link to="/profile">
+          <button data-testid="profile-top-btn" type="button" src={ profileIcon }>
+            <img src={ profileIcon } alt="profile-icon" />
+          </button>
+        </Link>
+        <h1 data-testid="page-title">{title}</h1>
+        <div>
+          {isSearchInputShow && (
+            <input
+              type="text"
+              placeholder="Pesquise aqui"
+              data-testid="search-input"
+            />
+          )}
+          {!notSearch && (
+            <button
+              data-testid="search-top-btn"
+              type="button"
+              src={ searchIcon }
+              onClick={ () => toggleSearchInput(!isSearchInputShow) }
+            >
+              <img src={ searchIcon } alt="search-icon" />
+            </button>
+          )}
+        </div>
+      </header>
     </div>
   );
 }

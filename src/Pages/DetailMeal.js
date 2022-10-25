@@ -5,7 +5,6 @@ function DetailMeal() {
   return (
     <div>
       DetailMeal
-      {id}
     </div>
   );
 }

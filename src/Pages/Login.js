@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 
-function Login({ history }) {
+function Login() {
   const { handleChange, isDisabled, submitLogin } = useContext(MyContext);
+  const history = useHistory();
 
   const redirectTo = (pathname) => {
     submitLogin();

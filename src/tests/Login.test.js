@@ -1,25 +1,43 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import App from '../App';
-import renderWithRouter from './helper/renderWithRouter';
+import renderWithProvider from './helper/renderWithProvider';
+
+const mockHistoryPush = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: mockHistoryPush,
+  }),
+}));
 
 describe('Testa a tela de Login', () => {
+  const EMAIL_INPUT = 'email-input';
+  const PASSWORD_INPUT = 'password-input';
+  const SUBMIT_BTN = 'login-submit-btn';
+
+  beforeEach(() => {
+    act(() => {
+      renderWithProvider(<App />, 'meals');
+    });
+  });
+
   test('Testa se os componentes do header estão sendo renderizados', () => {
-    renderWithRouter(<App />);
-    const emailInput = screen.getByTestId('email-input');
-    const passwordInput = screen.getByTestId('password-input');
-    const submitBtn = screen.getByTestId('login-submit-btn');
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const passwordInput = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(SUBMIT_BTN);
 
     const elements = [emailInput, passwordInput, submitBtn];
 
     elements.forEach((e) => expect(e).toBeInTheDocument());
   });
   test('Testa se a validação dos inputs está funcionando', () => {
-    renderWithRouter(<App />);
-    const emailInput = screen.getByTestId('email-input');
-    const passwordInput = screen.getByTestId('password-input');
-    const submitBtn = screen.getByTestId('login-submit-btn');
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const passwordInput = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(SUBMIT_BTN);
 
     const validEmail = 'teste@teste.com';
     const invalidEmail = 'teste';
@@ -45,15 +63,17 @@ describe('Testa a tela de Login', () => {
     expect(submitBtn).not.toBeDisabled();
   });
   test('Verifica se quando clica no botão de login o usuário é redirecionado', () => {
-    const { history } = renderWithRouter(<App />);
-    const emailInput = screen.getByTestId('email-input');
-    const passwordInput = screen.getByTestId('password-input');
-    const submitBtn = screen.getByTestId('login-submit-btn');
+    const emailInput = screen.getByTestId(EMAIL_INPUT);
+    const passwordInput = screen.getByTestId(PASSWORD_INPUT);
+    const submitBtn = screen.getByTestId(SUBMIT_BTN);
+
     const validEmail = 'teste@teste.com';
     const validPassword = '1234567';
+
     userEvent.type(emailInput, validEmail);
     userEvent.type(passwordInput, validPassword);
     userEvent.click(submitBtn);
-    console.log(history.location.pathname);
+
+    expect(mockHistoryPush).toHaveBeenCalledWith('/meals');
   });
 });

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-function Header({ title, notSearch }) {
-  const [isSearchInputShow, toggleSearchInput] = useState(false);
+function Header({ title, withoutSearch }) {
+  const [isSearchInputShown, toggleSearchInput] = useState(false);
 
   return (
     <div className="header-container">
@@ -17,19 +17,19 @@ function Header({ title, notSearch }) {
         </Link>
         <h1 data-testid="page-title">{title}</h1>
         <div>
-          {isSearchInputShow && (
+          {isSearchInputShown && (
             <input
               type="text"
               placeholder="Pesquise aqui"
               data-testid="search-input"
             />
           )}
-          {!notSearch && (
+          {!withoutSearch && (
             <button
               data-testid="search-top-btn"
               type="button"
               src={ searchIcon }
-              onClick={ () => toggleSearchInput(!isSearchInputShow) }
+              onClick={ () => toggleSearchInput(!isSearchInputShown) }
             >
               <img src={ searchIcon } alt="search-icon" />
             </button>

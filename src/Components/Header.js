@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import MyContext from '../context/MyContext';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
 function Header({ title, withoutSearch }) {
   const [isSearchInputShown, toggleSearchInput] = useState(false);
+  const { handleChange } = useContext(MyContext);
 
   return (
     <div className="header-container">
@@ -22,6 +24,8 @@ function Header({ title, withoutSearch }) {
               type="text"
               placeholder="Pesquise aqui"
               data-testid="search-input"
+              name="searchInput"
+              onChange={ handleChange }
             />
           )}
           {!withoutSearch && (

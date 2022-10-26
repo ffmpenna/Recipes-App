@@ -111,12 +111,20 @@ input {
   padding: 5px 50px;
 }
 
-.footer {
+.footer-container {
+  align-items: center;
+  background-color: #f95;
   bottom: 0;
-  color: white;
-  height: 100px;
-  line-height: 100px;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
   position: fixed;
   text-align: center;
   width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-evenly;
+  width: 150px;
 }

@@ -16,13 +16,14 @@ export default function SearchBar({ page }) {
     setFoods,
     drinkz,
     setDrinkz,
+    setRecipes,
+    recipes,
   } = useContext(MyContext);
 
   const onBtnClick = async () => {
     const { radioBtn, searchInput } = loginInfo;
     const results = await fetchByQuery(radioBtn, searchInput, page);
     const doze = 12;
-    console.log(results);
     if (results) {
       const { meals } = results;
       const { drinks } = results;

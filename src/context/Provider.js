@@ -30,12 +30,18 @@ function Provider({ children }) {
       if (searchInput.length !== 1) {
         global.alert('Your search must have only 1 (one) character');
       } else if (searchInput.length === 1) {
-        data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`);
+        data = await fetch(
+          `https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`,
+        );
       }
     } else if (query === 'ingredient') {
-      data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`);
+      data = await fetch(
+        `https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`,
+      );
     } else if (query === 'name') {
-      data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`);
+      data = await fetch(
+        `https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`,
+      );
     }
     if (data && page === 'meals') {
       const meals = await data.json();
@@ -43,13 +49,26 @@ function Provider({ children }) {
         global.alert(errString);
       }
       return meals;
-    } if (data && page === 'drinks') {
+    }
+    if (data && page === 'drinks') {
       const drinks = await data.json();
       if (drinks === null) {
         global.alert(errString);
       }
       return drinks;
     }
+  };
+
+  const fetchRecipes = async (page) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        'https://www.themealdb.com/api/json/v1/1/search.php?s=',
+      );
+    } else if (page === 'drinks') {
+      data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+    }
+    return data.json();
   };
 
   const handleChange = useCallback(
@@ -66,6 +85,8 @@ function Provider({ children }) {
     localStorage.setItem('user', JSON.stringify({ email: inputEmail }));
   }, [loginInfo]);
 
+  const [recipes, setRecipes] = useState([]);
+
   useEffect(() => {
     validateInputs();
   }, [validateInputs]);
@@ -76,13 +97,16 @@ function Provider({ children }) {
       loginInfo,
       drinkz,
       foods,
+      recipes,
       handleChange,
       setFoods,
       setDrinkz,
       submitLogin,
       fetchByQuery,
+      fetchRecipes,
+      setRecipes,
     }),
-    [isDisabled, loginInfo, drinkz, foods, handleChange, submitLogin],
+    [isDisabled, loginInfo, drinkz, foods, recipes, handleChange, submitLogin],
   );
 
   return (

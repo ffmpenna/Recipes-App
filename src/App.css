@@ -112,12 +112,12 @@ input {
 }
 
 .footer {
-  position: fixed;
   bottom: 0;
-  color: #FFF;
-  width: 100%;
+  position: fixed;
+  color: white;
   height: 100px;
-  text-align: center;
+  width: 100%;
   line-height: 100px;
+  text-align: center;
 }
 

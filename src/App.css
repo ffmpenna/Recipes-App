@@ -117,6 +117,7 @@ input {
   bottom: 0;
   display: flex;
   justify-content: center;
+  margin-top: 100px;
   padding: 10px;
   position: fixed;
   text-align: center;
@@ -127,4 +128,9 @@ input {
   display: flex;
   justify-content: space-evenly;
   width: 150px;
+}
+
+.clear {
+  clear: both;
+  height: 50px;
 }

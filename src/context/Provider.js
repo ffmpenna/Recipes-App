@@ -14,7 +14,7 @@ function Provider({ children }) {
   const [foods, setFoods] = useState([]);
   const [drinkz, setDrinkz] = useState([]);
   const [isFilterOn, setFilterOn] = useState(false);
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState({ meals: [], drinks: [] });
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;

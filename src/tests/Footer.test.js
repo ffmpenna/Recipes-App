@@ -7,7 +7,7 @@ import Footer from '../Pages/Footer';
 describe('testa o componente Footer', () => {
   it('testa se existem o elementos no componente', () => {
     act(() => {
-      renderWithProvider(<Footer />);
+      renderWithProvider(<Footer />, '/footer');
       const footer = screen.getByTestId(/footer/i);
       expect(footer).toBeInTheDocument();
     });

@@ -1,5 +1,5 @@
 body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana , Geneva , Tahoma , sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
@@ -74,7 +74,7 @@ input {
   color: #0d172a;
   cursor: pointer;
   display: inline-block;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana , Geneva , Tahoma , sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   line-height: 1;
@@ -114,8 +114,8 @@ input {
 .footer {
   bottom: 0;
   color: white;
-  line-height: 100px;
   height: 100px;
+  line-height: 100px;
   position: fixed;
   text-align: center;
   width: 100%;

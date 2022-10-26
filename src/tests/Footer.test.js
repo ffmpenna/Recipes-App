@@ -5,11 +5,13 @@ import renderWithProvider from './helper/renderWithProvider';
 import Footer from '../Pages/Footer';
 
 describe('testa o componente Footer', () => {
-  it('testa se existem o elementos no componente', () => {
+  beforeEach(() => {
     act(() => {
-      renderWithProvider(<Footer />, '/footer');
-      const footer = screen.getByTestId(/footer/i);
-      expect(footer).toBeInTheDocument();
+      renderWithProvider(<Footer />, 'footer');
     });
+  });
+  it('testa se existem o elementos no componente', () => {
+    const footer = screen.getByTestId(/footer/i);
+    expect(footer).toBeInTheDocument();
   });
 });

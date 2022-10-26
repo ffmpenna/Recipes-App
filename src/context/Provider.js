@@ -6,9 +6,13 @@ function Provider({ children }) {
   const [loginInfo, setLoginInfo] = useState({
     inputEmail: '',
     inputPassword: '',
+    radioBtn: '',
+    searchInput: '',
   });
-
+  const errString = 'Sorry, we haven\'t found any recipes for these filters.';
   const [isDisabled, toggleButton] = useState(true);
+  const [foods, setFoods] = useState([]);
+  const [drinkz, setDrinkz] = useState([]);
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -18,6 +22,35 @@ function Provider({ children }) {
     const verifyUser = inputPassword.length > number;
     toggleButton(!(verifyEmail && verifyUser));
   }, [loginInfo]);
+
+  const fetchByQuery = async (query, searchInput, page) => {
+    let data;
+    const linkToFetch = page === 'meals' ? 'themealdb' : 'thecocktaildb';
+    if (query === 'first-letter') {
+      if (searchInput.length !== 1) {
+        global.alert('Your search must have only 1 (one) character');
+      } else if (searchInput.length === 1) {
+        data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`);
+      }
+    } else if (query === 'ingredient') {
+      data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`);
+    } else if (query === 'name') {
+      data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`);
+    }
+    if (page === 'meals') {
+      const meals = await data.json();
+      if (meals === null) {
+        global.alert(errString);
+      }
+      return meals;
+    } if (page === 'drinks') {
+      const drinks = await data.json();
+      if (drinks === null) {
+        global.alert(errString);
+      }
+      return drinks;
+    }
+  };
 
   const handleChange = useCallback(
     ({ target }) => {
@@ -41,10 +74,15 @@ function Provider({ children }) {
     () => ({
       isDisabled,
       loginInfo,
+      drinkz,
+      foods,
       handleChange,
+      setFoods,
+      setDrinkz,
       submitLogin,
+      fetchByQuery,
     }),
-    [isDisabled, loginInfo, handleChange, submitLogin],
+    [isDisabled, loginInfo, drinkz, foods, handleChange, submitLogin],
   );
 
   return (

@@ -12,6 +12,10 @@ describe('testa o componente Footer', () => {
   });
   it('testa se existem o elementos no componente', () => {
     const footer = screen.getByTestId(/footer/i);
+    const buttonDrink = screen.getByTestId(/drinks-bottom-btn/i);
+    const buttonMeals = screen.getByTestId(/meals-bottom-btn/i);
     expect(footer).toBeInTheDocument();
+    expect(buttonDrink).toBeInTheDocument();
+    expect(buttonMeals).toBeInTheDocument();
   });
 });

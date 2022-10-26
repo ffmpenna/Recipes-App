@@ -1,6 +1,7 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
 import Header from '../Components/Header';
+import Recipes from '../Components/Recipes';
 import SearchBar from '../Components/SearchBar';
 import Footer from './Footer';
 
@@ -9,6 +10,7 @@ function Meals() {
     <div>
       <Header title="Meals" />
       <SearchBar page="meals" />
+      <Recipes page="meals" />
       <Footer />
     </div>
   );

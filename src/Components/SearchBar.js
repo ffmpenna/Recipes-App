@@ -1,32 +1,23 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import MyContext from '../context/MyContext';
-import DrinkCard from './DrinkCard';
-import FoodCard from './FoodCard';
 
 export default function SearchBar({ page }) {
-  const history = useHistory();
-
   const {
-    fetchByQuery,
-    handleChange,
-    loginInfo,
-    foods,
-    setFoods,
-    drinkz,
-    setDrinkz,
+    fetchByQuery, handleChange,
+    loginInfo, setFoods,
+    setDrinkz, setFilterOn,
   } = useContext(MyContext);
 
   const onBtnClick = async () => {
     const { radioBtn, searchInput } = loginInfo;
     const results = await fetchByQuery(radioBtn, searchInput, page);
     const doze = 12;
-    console.log(results);
     if (results) {
       const { meals } = results;
       const { drinks } = results;
-      console.log(meals);
+      setFilterOn(true);
       if (meals && page === 'meals') {
         const dozeReceitas = meals.slice(0, doze);
         setFoods(dozeReceitas);
@@ -35,6 +26,7 @@ export default function SearchBar({ page }) {
         setDrinkz(dozeReceitas);
       } else {
         global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        setFilterOn(false);
       }
     }
   };
@@ -74,36 +66,6 @@ export default function SearchBar({ page }) {
       <button type="button" data-testid="exec-search-btn" onClick={ onBtnClick }>
         Buscar
       </button>
-      <div disabled={ page === 'drinks' }>
-        {foods && foods.length > 1
-          ? foods.map((recipe, index) => (
-            <FoodCard
-              key={ index }
-              index={ index }
-              name={ recipe.strMeal }
-              img={ recipe.strMealThumb }
-              id={ recipe.idMeal }
-            />
-          ))
-          : foods
-            && foods.length === 1
-            && history.push(`/meals/${foods[0].idMeal}`)}
-      </div>
-      <div>
-        {drinkz && drinkz.length > 1
-          ? drinkz.map((recipe, index) => (
-            <DrinkCard
-              key={ index }
-              index={ index }
-              name={ recipe.strDrink }
-              img={ recipe.strDrinkThumb }
-              id={ recipe.idDrink }
-            />
-          ))
-          : drinkz
-            && drinkz.length === 1
-            && history.push(`/drinks/${drinkz[0].idDrink}`)}
-      </div>
     </div>
   );
 }

@@ -113,11 +113,11 @@ input {
 
 .footer {
   bottom: 0;
-  position: fixed;
   color: white;
+  position: fixed;
   height: 100px;
-  width: 100%;
   line-height: 100px;
+  width: 100%;
   text-align: center;
 }
 

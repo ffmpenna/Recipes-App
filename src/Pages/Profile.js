@@ -2,14 +2,12 @@
 import React from 'react';
 import Header from '../Components/Header';
 
-function Meals() {
+function Profile() {
   return (
-    <div>
-      <Header title="Meals" />
-    </div>
+    <Header title="Profile" withoutSearch />
   );
 }
 
-Meals.propTypes = {};
+// Profile.propTypes = {};
 
-export default Meals;
+export default Profile;

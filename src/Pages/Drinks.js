@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Components/Header';
 import SearchBar from '../Components/SearchBar';
+import Footer from './Footer';
 // import PropTypes from 'prop-types'
 
 function Drinks() {
@@ -8,6 +9,7 @@ function Drinks() {
     <>
       <Header title="Drinks" />
       <SearchBar page="drinks" />
+      <Footer />
     </>
   );
 }

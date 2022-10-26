@@ -37,13 +37,13 @@ function Provider({ children }) {
     } else if (query === 'name') {
       data = await fetch(`https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`);
     }
-    if (page === 'meals') {
+    if (data && page === 'meals') {
       const meals = await data.json();
       if (meals === null) {
         global.alert(errString);
       }
       return meals;
-    } if (page === 'drinks') {
+    } if (data && page === 'drinks') {
       const drinks = await data.json();
       if (drinks === null) {
         global.alert(errString);

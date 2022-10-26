@@ -13,6 +13,8 @@ function Provider({ children }) {
   const [isDisabled, toggleButton] = useState(true);
   const [foods, setFoods] = useState([]);
   const [drinkz, setDrinkz] = useState([]);
+  const [isFilterOn, setFilterOn] = useState(false);
+  const [recipes, setRecipes] = useState([]);
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -66,9 +68,11 @@ function Provider({ children }) {
         'https://www.themealdb.com/api/json/v1/1/search.php?s=',
       );
     } else if (page === 'drinks') {
-      data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+      data = await fetch(
+        'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      );
     }
-    return data.json();
+    setRecipes(await data.json());
   };
 
   const handleChange = useCallback(
@@ -85,8 +89,6 @@ function Provider({ children }) {
     localStorage.setItem('user', JSON.stringify({ email: inputEmail }));
   }, [loginInfo]);
 
-  const [recipes, setRecipes] = useState([]);
-
   useEffect(() => {
     validateInputs();
   }, [validateInputs]);
@@ -98,6 +100,7 @@ function Provider({ children }) {
       drinkz,
       foods,
       recipes,
+      isFilterOn,
       handleChange,
       setFoods,
       setDrinkz,
@@ -105,8 +108,19 @@ function Provider({ children }) {
       fetchByQuery,
       fetchRecipes,
       setRecipes,
+      setFilterOn,
     }),
-    [isDisabled, loginInfo, drinkz, foods, recipes, handleChange, submitLogin],
+    [
+      isDisabled,
+      loginInfo,
+      drinkz,
+      foods,
+      recipes,
+      isFilterOn,
+      setFilterOn,
+      handleChange,
+      submitLogin,
+    ],
   );
 
   return (

@@ -1,53 +1,86 @@
-import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 import DrinkCard from './DrinkCard';
 import FoodCard from './FoodCard';
-// import PropTypes from 'prop-types'
 
 function Recipes({ page }) {
-  const { fetchRecipes, setRecipes, recipes } = useContext(MyContext);
+  const history = useHistory();
+
+  const { foods, drinkz, isFilterOn, fetchRecipes, recipes } = useContext(MyContext);
+
+  const MAX_DISPLAY = 12;
 
   useEffect(() => {
-    (async () => {
-      const getApi = await fetchRecipes(page);
-      if (page === 'meals') {
-        setRecipes(getApi.meals);
-      } else {
-        setRecipes(getApi.drinks);
-      }
-    })();
-  }, [fetchRecipes, setRecipes, page]);
+    async function fetchMyAPI() {
+      await fetchRecipes(page);
+    }
+    fetchMyAPI();
+  }, [page]);
+
+  const displayCards = (array, type) => {
+    if (type === 'meals') {
+      return array.map((recipe, index) => (
+        <FoodCard
+          key={ index }
+          index={ index }
+          name={ recipe.strMeal }
+          img={ recipe.strMealThumb }
+          id={ recipe.idMeal }
+        />
+      ));
+    }
+    if (type === 'drinks') {
+      return array.map((recipe, index) => (
+        <DrinkCard
+          key={ index }
+          index={ index }
+          name={ recipe.strDrink }
+          img={ recipe.strDrinkThumb }
+          id={ recipe.idDrink }
+        />
+      ));
+    }
+  };
 
   return (
     <div>
-      {page === 'meals'
-        && recipes
-          .splice(0, 12)
-          .map((recipe, index) => (
-            <FoodCard
-              key={ index }
-              index={ index }
-              name={ recipe.strMeal }
-              img={ recipe.strMealThumb }
-              id={ recipe.idMeal }
-            />
-          ))}
-      {page === 'drinks'
-        && recipes
-          .splice(0, 12)
-          .map((recipe, index) => (
-            <DrinkCard
-              key={ index }
-              index={ index }
-              name={ recipe.strDrink }
-              img={ recipe.strDrinkThumb }
-              id={ recipe.idDrink }
-            />
-          ))}
+      {isFilterOn ? (
+        <div>
+          <div disabled={ page === 'drinks' }>
+            {foods && foods.length > 1
+              ? displayCards(foods, 'meals')
+              : foods
+                && foods.length === 1
+                && history.push(`/meals/${foods[0].idMeal}`)}
+          </div>
+          <div>
+            {drinkz && drinkz.length > 1
+              ? displayCards(drinkz, 'drinks')
+              : drinkz
+                && drinkz.length === 1
+                && history.push(`/drinks/${drinkz[0].idDrink}`)}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>Sem filtro</h1>
+          <div>
+            {recipes.meals && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
+          </div>
+          <div>
+            {recipes.drinks
+              && displayCards(recipes.drinks.slice(0, MAX_DISPLAY), 'drinks')}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-// Recipes.propTypes = {}
+Recipes.propTypes = {
+  pages: PropTypes.string,
+}.isRequired;
 
 export default Recipes;

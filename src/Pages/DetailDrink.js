@@ -3,8 +3,9 @@ import MyContext from '../context/MyContext';
 // import PropTypes from 'prop-types'
 
 function DetailDrink(prop) {
-  const { fetchRecipeById } = useContext(MyContext);
+  const { fetchRecipeById, adviceRecibeByFood } = useContext(MyContext);
   const [detailDrink, setDetailDrink] = useState({ drinks: [] });
+  const [/* adviceMeal */, setAdviceMeal] = useState({ meal: [] });
   const { match } = prop;
   const { params } = match;
   const { id } = params;
@@ -14,6 +15,13 @@ function DetailDrink(prop) {
       setDetailDrink(await fetchRecipeById('drinks', id));
     }
     fetchMyAPI();
+  }, []);
+
+  useEffect(() => {
+    async function fetchMyAPI2() {
+      setAdviceMeal(await adviceRecibeByFood('drinks'));
+    }
+    fetchMyAPI2();
   }, []);
 
   const drink = detailDrink.drinks[0];

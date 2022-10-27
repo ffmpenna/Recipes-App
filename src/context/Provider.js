@@ -125,6 +125,21 @@ function Provider({ children }) {
     return recipe;
   }, []);
 
+  const adviceRecibeByFood = useCallback(async (page) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
+      );
+    } else if (page === 'drinks') {
+      data = await fetch(
+        'https://www.themealdb.com/api/json/v1/1/search.php?s=',
+      );
+    }
+    const advice = await data.json();
+    return advice;
+  }, []);
+
   const handleChange = useCallback(
     ({ target }) => {
       const auxValues = { ...loginInfo };
@@ -162,6 +177,7 @@ function Provider({ children }) {
       fetchCategories,
       fetchRecipesByCategory,
       fetchRecipeById,
+      adviceRecibeByFood,
       setRecipes,
       setFilterOn,
     }),
@@ -180,6 +196,7 @@ function Provider({ children }) {
       fetchCategories,
       fetchRecipesByCategory,
       fetchRecipeById,
+      adviceRecibeByFood,
     ],
   );
 

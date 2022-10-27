@@ -3,8 +3,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
 
 function DetailMeal(meals) {
-  const { fetchRecipeById } = useContext(MyContext);
+  const { fetchRecipeById, adviceRecibeByFood } = useContext(MyContext);
   const [detailMeal, setDetailMeal] = useState({ meals: [] });
+  const [/* adviceDrink */, setAdviceDrink] = useState({ drink: [] });
   const { match } = meals;
   const { params } = match;
   const { id } = params;
@@ -14,6 +15,13 @@ function DetailMeal(meals) {
       setDetailMeal(await fetchRecipeById('meals', id));
     }
     fetchMyAPI();
+  }, []);
+
+  useEffect(() => {
+    async function fetchMyAPI2() {
+      setAdviceDrink(await adviceRecibeByFood('meals'));
+    }
+    fetchMyAPI2();
   }, []);
 
   const meal = detailMeal.meals[0];

@@ -79,19 +79,22 @@ function Provider({ children }) {
     setRecipes(await data.json());
   };
 
-  const fetchCategories = useCallback(async (page) => {
-    let data;
-    if (page === 'meals') {
-      data = await fetch(
-        'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
-      );
-    } else if (page === 'drinks') {
-      data = await fetch(
-        'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list',
-      );
-    }
-    setCategories({ ...categories, allCategories: await data.json() });
-  }, [categories]);
+  const fetchCategories = useCallback(
+    async (page) => {
+      let data;
+      if (page === 'meals') {
+        data = await fetch(
+          'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
+        );
+      } else if (page === 'drinks') {
+        data = await fetch(
+          'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list',
+        );
+      }
+      setCategories({ ...categories, allCategories: await data.json() });
+    },
+    [categories],
+  );
 
   const fetchRecipesByCategory = useCallback(async (page, category) => {
     let data;
@@ -105,6 +108,21 @@ function Provider({ children }) {
       );
     }
     setRecipes(await data.json());
+  }, []);
+
+  const fetchRecipeById = useCallback(async (page, id) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+      );
+    } else if (page === 'drinks') {
+      data = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`,
+      );
+    }
+    const recipe = await data.json();
+    return recipe;
   }, []);
 
   const handleChange = useCallback(
@@ -143,6 +161,7 @@ function Provider({ children }) {
       fetchRecipes,
       fetchCategories,
       fetchRecipesByCategory,
+      fetchRecipeById,
       setRecipes,
       setFilterOn,
     }),
@@ -160,6 +179,7 @@ function Provider({ children }) {
       setCategories,
       fetchCategories,
       fetchRecipesByCategory,
+      fetchRecipeById,
     ],
   );
 

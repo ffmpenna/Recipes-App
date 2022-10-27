@@ -1,59 +1,52 @@
 // import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
 
-function DetailMeal(meal) {
-  const { fetchRecipes, recipes } = useContext(MyContext);
-  const { match } = meal;
+function DetailMeal(meals) {
+  const { fetchRecipeById } = useContext(MyContext);
+  const [detailMeal, setDetailMeal] = useState({ meals: [] });
+  const { match } = meals;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
     async function fetchMyAPI() {
-      await fetchRecipes('meals');
+      setDetailMeal(await fetchRecipeById('meals', id));
     }
     fetchMyAPI();
   }, []);
 
-  const renderFoods = (f) => {
-    if (recipes.meals) {
-      const food = [...recipes.meals.filter((e) => e.idMeal === f)];
+  const meal = detailMeal.meals[0];
 
-      return food;
-    }
-  };
-
-  const prato = renderFoods(id);
-
-  const teste = () => {
-    const ingredients = Object.keys(prato[0])
+  const loadIngredients = () => {
+    const ingredients = Object.keys(meal)
       .filter((k) => k.match('strIngredient'))
-      .map((e) => prato[0][e]);
+      .map((e) => meal[e]);
 
-    const measure = Object.keys(prato[0])
+    const measure = Object.keys(meal)
       .filter((k) => k.match('strMeasure'))
-      .map((e) => prato[0][e]);
+      .map((e) => meal[e]);
 
-    const ueun = ingredients.map((ingredient, i) => (
+    const ingredientsList = ingredients.map((ingredient, i) => (
       <p key={ `igredient_${i}` }>{`${measure[i]} ${ingredient}`}</p>
     ));
 
-    return ueun;
+    return ingredientsList;
   };
 
   return (
     <div>
-      {prato[0] ? (
+      {meal ? (
         <div>
-          <h2>{prato[0].strMeal}</h2>
+          <h2>{meal.strMeal}</h2>
           <img
             height="325"
             width="425"
-            src={ prato[0].strMealThumb }
-            alt={ prato[0].strMeal }
+            src={ meal.strMealThumb }
+            alt={ meal.strMeal }
           />
-          <p>{prato[0].strInstructions}</p>
-          {teste()}
+          <p>{meal.strInstructions}</p>
+          {loadIngredients()}
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -28,9 +28,19 @@ function DetailDrink(prop) {
       .map((e) => drink[e[0]]);
 
     const ingredientsList = ingredients.map((ingredient, i) => (measure[i] ? (
-      <p key={ `igredient_${i}` }>{`${measure[i]} - ${ingredient}`}</p>
+      <p
+        data-testid={ `${i}-ingredient-name-and-measure` }
+        key={ `ingredient_${i}` }
+      >
+        {`${measure[i]} - ${ingredient}`}
+      </p>
     ) : (
-      <p key={ `igredient_${i}` }>{`${ingredient}`}</p>
+      <p
+        data-testid={ `${i}-ingredient-name-and-measure` }
+        key={ `ingredient_${i}` }
+      >
+        {`${ingredient}`}
+      </p>
     )));
 
     return ingredientsList;
@@ -40,14 +50,16 @@ function DetailDrink(prop) {
     <div>
       {drink ? (
         <div>
-          <h2>{drink.strDrink}</h2>
+          <h2 data-testid="recipe-title">{drink.strDrink}</h2>
           <img
+            data-testid="recipe-photo"
             height="325"
             width="425"
             src={ drink.strDrinkThumb }
             alt={ drink.strDrink }
           />
-          <p>{drink.strInstructions}</p>
+          <p data-testid="recipe-category">{drink.strAlcoholic}</p>
+          <p data-testid="instructions">{drink.strInstructions}</p>
           {loadIngredients()}
         </div>
       ) : (

@@ -15,6 +15,10 @@ function Provider({ children }) {
   const [drinkz, setDrinkz] = useState([]);
   const [isFilterOn, setFilterOn] = useState(false);
   const [recipes, setRecipes] = useState({ meals: [], drinks: [] });
+  const [categories, setCategories] = useState({
+    allCategories: [],
+    selectedCategory: '',
+  });
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -75,6 +79,34 @@ function Provider({ children }) {
     setRecipes(await data.json());
   };
 
+  const fetchCategories = useCallback(async (page) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
+      );
+    } else if (page === 'drinks') {
+      data = await fetch(
+        'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list',
+      );
+    }
+    setCategories({ ...categories, allCategories: await data.json() });
+  }, [categories]);
+
+  const fetchRecipesByCategory = useCallback(async (page, category) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`,
+      );
+    } else if (page === 'drinks') {
+      data = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`,
+      );
+    }
+    setRecipes(await data.json());
+  }, []);
+
   const handleChange = useCallback(
     ({ target }) => {
       const auxValues = { ...loginInfo };
@@ -101,16 +133,21 @@ function Provider({ children }) {
       foods,
       recipes,
       isFilterOn,
+      categories,
+      setCategories,
       handleChange,
       setFoods,
       setDrinkz,
       submitLogin,
       fetchByQuery,
       fetchRecipes,
+      fetchCategories,
+      fetchRecipesByCategory,
       setRecipes,
       setFilterOn,
     }),
     [
+      categories,
       isDisabled,
       loginInfo,
       drinkz,
@@ -120,6 +157,9 @@ function Provider({ children }) {
       setFilterOn,
       handleChange,
       submitLogin,
+      setCategories,
+      fetchCategories,
+      fetchRecipesByCategory,
     ],
   );
 

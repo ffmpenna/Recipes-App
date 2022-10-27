@@ -8,9 +8,20 @@ import FoodCard from './FoodCard';
 function Recipes({ page }) {
   const history = useHistory();
 
-  const { foods, drinkz, isFilterOn, fetchRecipes, recipes } = useContext(MyContext);
+  const {
+    foods,
+    drinkz,
+    isFilterOn,
+    fetchRecipes,
+    recipes,
+    categories,
+    fetchCategories,
+    setCategories,
+    fetchRecipesByCategory,
+  } = useContext(MyContext);
 
   const MAX_DISPLAY = 12;
+  const LENGTH = 5;
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -44,8 +55,53 @@ function Recipes({ page }) {
     }
   };
 
+  useEffect(() => {
+    async function fetchMyAPI() {
+      await fetchCategories(page);
+    }
+    fetchMyAPI();
+  }, [page]);
+
+  const selectCategory = async ({ target }) => {
+    const { value } = target;
+    await setCategories({ ...categories, selectedCategory: value });
+    console.log(categories.selectedCategory);
+    if (value !== categories.selectedCategory) {
+      fetchRecipesByCategory(page, value);
+    } else {
+      setCategories({ ...categories, selectedCategory: '' });
+      fetchRecipes(page);
+    }
+  };
+
   return (
     <div>
+      <div>
+        {categories.allCategories[page]
+          && categories.allCategories[page]
+            .slice(0, LENGTH)
+            .map((category, index) => (
+              <label htmlFor={ `${category}${index}` } key={ index }>
+                <input
+                  data-testid={ `${category.strCategory}-category-filter` }
+                  type="radio"
+                  id={ `${category}${index}` }
+                  name="category"
+                  value={ category.strCategory }
+                  onClick={ selectCategory }
+                />
+                {category.strCategory}
+              </label>
+            ))}
+      </div>
+      <button
+        className="button"
+        data-testid="All-category-filter"
+        type="button"
+        onClick={ async () => fetchRecipes(page) }
+      >
+        All
+      </button>
       {isFilterOn ? (
         <div>
           <div disabled={ page === 'drinks' }>
@@ -65,9 +121,9 @@ function Recipes({ page }) {
         </div>
       ) : (
         <div>
-          <h1>Sem filtro</h1>
           <div>
-            {recipes.meals && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
+            {recipes.meals
+              && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
           </div>
           <div>
             {recipes.drinks

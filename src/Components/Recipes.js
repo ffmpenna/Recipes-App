@@ -8,8 +8,17 @@ import FoodCard from './FoodCard';
 function Recipes({ page }) {
   const history = useHistory();
 
-  const { foods, drinkz, isFilterOn, fetchRecipes, recipes,
-    categories, fetchCategories } = useContext(MyContext);
+  const {
+    foods,
+    drinkz,
+    isFilterOn,
+    fetchRecipes,
+    recipes,
+    categories,
+    fetchCategories,
+    setCategories,
+    fetchRecipesByCategory,
+  } = useContext(MyContext);
 
   const MAX_DISPLAY = 12;
   const LENGTH = 5;
@@ -52,26 +61,47 @@ function Recipes({ page }) {
     }
     fetchMyAPI();
   }, [page]);
-  // console.log(categories);
+
+  const selectCategory = async ({ target }) => {
+    const { value } = target;
+    await setCategories({ ...categories, selectedCategory: value });
+    console.log(categories.selectedCategory);
+    if (value !== categories.selectedCategory) {
+      fetchRecipesByCategory(page, value);
+    } else {
+      setCategories({ ...categories, selectedCategory: '' });
+      fetchRecipes(page);
+    }
+  };
 
   return (
     <div>
       <div>
-        {
-          categories[page] && categories[page].slice(0, LENGTH).map((category, index) => (
-            <label htmlFor="categories" key={ index }>
-              <input
-                data-testid={ `${category.strCategory}-category-filter` }
-                type="radio"
-                id={ `${category}${index}` }
-                name="category"
-                value={ category.strCategory }
-              />
-              {category.strCategory}
-            </label>
-          ))
-        }
+        {categories.allCategories[page]
+          && categories.allCategories[page]
+            .slice(0, LENGTH)
+            .map((category, index) => (
+              <label htmlFor={ `${category}${index}` } key={ index }>
+                <input
+                  data-testid={ `${category.strCategory}-category-filter` }
+                  type="radio"
+                  id={ `${category}${index}` }
+                  name="category"
+                  value={ category.strCategory }
+                  onClick={ selectCategory }
+                />
+                {category.strCategory}
+              </label>
+            ))}
       </div>
+      <button
+        className="button"
+        data-testid="All-category-filter"
+        type="button"
+        onClick={ async () => fetchRecipes(page) }
+      >
+        All
+      </button>
       {isFilterOn ? (
         <div>
           <div disabled={ page === 'drinks' }>
@@ -92,7 +122,8 @@ function Recipes({ page }) {
       ) : (
         <div>
           <div>
-            {recipes.meals && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
+            {recipes.meals
+              && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
           </div>
           <div>
             {recipes.drinks

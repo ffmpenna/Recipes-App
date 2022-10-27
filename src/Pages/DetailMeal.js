@@ -25,6 +25,22 @@ function DetailMeal(meal) {
 
   const prato = renderFoods(id);
 
+  const teste = () => {
+    const ingredients = Object.keys(prato[0])
+      .filter((k) => k.match('strIngredient'))
+      .map((e) => prato[0][e]);
+
+    const measure = Object.keys(prato[0])
+      .filter((k) => k.match('strMeasure'))
+      .map((e) => prato[0][e]);
+
+    const ueun = ingredients.map((ingredient, i) => (
+      <p key={ `igredient_${i}` }>{`${measure[i]} ${ingredient}`}</p>
+    ));
+
+    return ueun;
+  };
+
   return (
     <div>
       {prato[0] ? (
@@ -36,6 +52,8 @@ function DetailMeal(meal) {
             src={ prato[0].strMealThumb }
             alt={ prato[0].strMeal }
           />
+          <p>{prato[0].strInstructions}</p>
+          {teste()}
         </div>
       ) : (
         <h1>Carregando...</h1>

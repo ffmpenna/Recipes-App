@@ -36,8 +36,11 @@ function DetailMeal(meals) {
       .map((e) => meal[e]);
 
     const ingredientsList = ingredients.map((ingredient, i) => (
-      <p key={ `ingredient_${i}` } data-testid={ `${i}-ingredient-name-and-measure` }>
-        {`${measure[i]} ${ingredient}`}
+      <p
+        data-testid={ `${i}-ingredient-name-and-measure` }
+        key={ `igredient_${i}` }
+      >
+        {measure !== '' && `${measure[i]} ${ingredient}`}
       </p>
     ));
 
@@ -58,14 +61,8 @@ function DetailMeal(meals) {
           />
           <p data-testid="recipe-category">{meal.strCategory}</p>
           <p data-testid="instructions">{meal.strInstructions}</p>
-          <iframe
-            data-testid="video"
-            title={ meal.strMeal }
-            src={ meal.strYoutube }
-          >
-            Video
-          </iframe>
           {loadIngredients()}
+
         </div>
       ) : (
         <h1>Carregando...</h1>

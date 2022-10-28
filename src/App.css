@@ -145,9 +145,9 @@ input {
 .horizontal-slider {
   display: block;
   margin: 0 auto;
+  margin-bottom: 100px;
   overflow-x: scroll;
   width: 420px;
-  margin-bottom: 100px;
 
 }
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import MyContext from '../context/MyContext';
 import '../App.css';
+import MyContext from '../context/MyContext';
 // import PropTypes from 'prop-types'
 
 function DetailDrink(prop) {
@@ -43,7 +43,7 @@ function DetailDrink(prop) {
         data-testid={ `${i}-ingredient-name-and-measure` }
         key={ `ingredient_${i}` }
       >
-        { measure !== '' && `${measure[i]} - ${ingredient}`}
+        {measure !== '' && `${measure[i]} - ${ingredient}`}
       </p>
     ) : (
       <p
@@ -61,6 +61,8 @@ function DetailDrink(prop) {
     setIsRedirectDrink(true);
   };
 
+  console.log(adviceMeal);
+
   return (
     <div>
       {drink ? (
@@ -76,39 +78,42 @@ function DetailDrink(prop) {
           <p data-testid="recipe-category">{drink.strAlcoholic}</p>
           <p data-testid="instructions">{drink.strInstructions}</p>
           {loadIngredients()}
-
-          <h1 className="header">Recomendações</h1>
-          <div className="horizontal-slider">
-            <div className="slider-container">
-              { adviceMeal.meals.splice(0, magicNumber).map((recomend, i) => (
-                <div
-                  className="item"
-                  data-testid={ `${i}-recommendation-card` }
-                  key={ recomend.strMeal }
-                >
-                  <h3
-                    data-testid={ `${i}-recommendation-title` }
-                  >
-                    {recomend.strMeal}
-                  </h3>
-                  <img
-                    className="images"
-                    src={ recomend.strMealThumb }
-                    alt={ recomend.strMeal }
-                  />
+          {adviceMeal.meals && (
+            <div>
+              <h1 className="header">Recomendações</h1>
+              <div className="horizontal-slider">
+                <div className="slider-container">
+                  {adviceMeal.meals
+                    .splice(0, magicNumber)
+                    .map((recomend, i) => (
+                      <div
+                        className="item"
+                        data-testid={ `${i}-recommendation-card` }
+                        key={ recomend.strMeal }
+                      >
+                        <h3 data-testid={ `${i}-recommendation-title` }>
+                          {recomend.strMeal}
+                        </h3>
+                        <img
+                          className="images"
+                          src={ recomend.strMealThumb }
+                          alt={ recomend.strMeal }
+                        />
+                      </div>
+                    ))}
                 </div>
-              ))}
+              </div>
+              <button
+                onClick={ handleRedirectDrink }
+                data-testid="start-recipe-btn"
+                className="button footer-container"
+                type="button"
+              >
+                Start Recipe
+              </button>
             </div>
-          </div>
-          <button
-            onClick={ handleRedirectDrink }
-            data-testid="start-recipe-btn"
-            className="button footer-container"
-            type="button"
-          >
-            Start Recipe
-          </button>
-          {isRedirectDrink && <Redirect to={ `drinks/${id}/in-progress"` } /> }
+          )}
+          {isRedirectDrink && <Redirect to={ `${id}/in-progress` } />}
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -1,59 +1,118 @@
 // import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import '../App.css';
 import MyContext from '../context/MyContext';
 
-function DetailMeal(meal) {
-  const { fetchRecipes, recipes } = useContext(MyContext);
-  const { match } = meal;
+function DetailMeal(meals) {
+  const { fetchRecipeById, fetchAdviceByFood, adviceDrink } = useContext(MyContext);
+  const [detailMeal, setDetailMeal] = useState({ meals: [] });
+  const { match } = meals;
   const { params } = match;
   const { id } = params;
+  const magicNumber = 6;
+
+  const [isRedirect, setIsRedirect] = useState(false);
 
   useEffect(() => {
     async function fetchMyAPI() {
-      await fetchRecipes('meals');
+      setDetailMeal(await fetchRecipeById('meals', id));
     }
     fetchMyAPI();
   }, []);
 
-  const renderFoods = (f) => {
-    if (recipes.meals) {
-      const food = [...recipes.meals.filter((e) => e.idMeal === f)];
-
-      return food;
+  useEffect(() => {
+    async function fetchMyAdviceAPI() {
+      await fetchAdviceByFood('meals');
     }
-  };
+    fetchMyAdviceAPI();
+  }, []);
 
-  const prato = renderFoods(id);
+  const meal = detailMeal.meals[0];
 
-  const teste = () => {
-    const ingredients = Object.keys(prato[0])
+  const loadIngredients = () => {
+    const ingredients = Object.keys(meal)
       .filter((k) => k.match('strIngredient'))
-      .map((e) => prato[0][e]);
+      .map((e) => meal[e]);
 
-    const measure = Object.keys(prato[0])
+    const measure = Object.keys(meal)
       .filter((k) => k.match('strMeasure'))
-      .map((e) => prato[0][e]);
+      .map((e) => meal[e]);
 
-    const ueun = ingredients.map((ingredient, i) => (
-      <p key={ `igredient_${i}` }>{`${measure[i]} ${ingredient}`}</p>
+    const ingredientsList = ingredients.map((ingredient, i) => (
+      <p
+        key={ `ingredient_${i}` }
+        data-testid={ `${i}-ingredient-name-and-measure` }
+      >
+        {measure !== '' && `${measure[i]} ${ingredient}`}
+      </p>
     ));
 
-    return ueun;
+    return ingredientsList;
   };
 
+  const handleRedirect = () => {
+    setIsRedirect(true);
+  };
+  console.log(adviceDrink.drinks);
   return (
     <div>
-      {prato[0] ? (
+      {meal ? (
         <div>
-          <h2>{prato[0].strMeal}</h2>
+          <h2 data-testid="recipe-title">{meal.strMeal}</h2>
           <img
+            data-testid="recipe-photo"
             height="325"
             width="425"
-            src={ prato[0].strMealThumb }
-            alt={ prato[0].strMeal }
+            src={ meal.strMealThumb }
+            alt={ meal.strMeal }
           />
-          <p>{prato[0].strInstructions}</p>
-          {teste()}
+          <p data-testid="recipe-category">{meal.strCategory}</p>
+          <p data-testid="instructions">{meal.strInstructions}</p>
+          <iframe
+            data-testid="video"
+            title={ meal.strMeal }
+            src={ meal.strYoutube }
+          >
+            Video
+          </iframe>
+          {loadIngredients()}
+          {adviceDrink.drinks && (
+            <div>
+              {' '}
+              <h1 className="header">Recomendações</h1>
+              <div className="horizontal-slider">
+                <div className="slider-container">
+                  {adviceDrink.drinks.splice(0, magicNumber).map((recom, i) => (
+                    <div
+                      className="item"
+                      data-testid={ `${i}-recommendation-card` }
+                      key={ recom.strDrink }
+                    >
+                      <h3 data-testid={ `${i}-recommendation-title` }>
+                        {recom.strDrink}
+                      </h3>
+                      <img
+                        className="images"
+                        src={ recom.strDrinkThumb }
+                        alt={ recom.strDrink }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button
+                onClick={ handleRedirect }
+                data-testid="start-recipe-btn"
+                className="button footer-container"
+                type="button"
+              >
+                Start Recipe
+              </button>
+            </div>
+          )}
+
+          {isRedirect && <Redirect to={ `/meals/${id}/in-progress` } />}
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -122,6 +122,7 @@ input {
   position: fixed;
   text-align: center;
   width: 100%;
+
 }
 
 .footer-content {
@@ -133,4 +134,38 @@ input {
 .clear {
   clear: both;
   height: 50px;
+}
+
+.images {
+  border-radius: 4px;
+  height: 100px;
+  width: 100%;
+}
+
+.horizontal-slider {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 100px;
+  overflow-x: scroll;
+  width: 420px;
+
+}
+
+.slider-container {
+  display: block;
+  white-space: nowrap;
+}
+
+.item {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.item img {
+  height: 150px;
+  width: 200px;
+}
+
+.header {
+  text-align: center;
 }

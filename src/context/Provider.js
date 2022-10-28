@@ -19,6 +19,8 @@ function Provider({ children }) {
     allCategories: [],
     selectedCategory: '',
   });
+  const [adviceDrink, setAdviceDrink] = useState({});
+  const [adviceMeal, setAdviceMeal] = useState({});
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -79,19 +81,22 @@ function Provider({ children }) {
     setRecipes(await data.json());
   };
 
-  const fetchCategories = useCallback(async (page) => {
-    let data;
-    if (page === 'meals') {
-      data = await fetch(
-        'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
-      );
-    } else if (page === 'drinks') {
-      data = await fetch(
-        'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list',
-      );
-    }
-    setCategories({ ...categories, allCategories: await data.json() });
-  }, [categories]);
+  const fetchCategories = useCallback(
+    async (page) => {
+      let data;
+      if (page === 'meals') {
+        data = await fetch(
+          'https://www.themealdb.com/api/json/v1/1/list.php?c=list',
+        );
+      } else if (page === 'drinks') {
+        data = await fetch(
+          'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list',
+        );
+      }
+      setCategories({ ...categories, allCategories: await data.json() });
+    },
+    [categories],
+  );
 
   const fetchRecipesByCategory = useCallback(async (page, category) => {
     let data;
@@ -105,6 +110,32 @@ function Provider({ children }) {
       );
     }
     setRecipes(await data.json());
+  }, []);
+
+  const fetchRecipeById = useCallback(async (page, id) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
+      );
+    } else if (page === 'drinks') {
+      data = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`,
+      );
+    }
+    const recipe = await data.json();
+    return recipe;
+  }, []);
+
+  const fetchAdviceByFood = useCallback(async (page) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+      setAdviceDrink(await data.json());
+    } else if (page === 'drinks') {
+      data = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      setAdviceMeal(await data.json());
+    }
   }, []);
 
   const handleChange = useCallback(
@@ -134,15 +165,21 @@ function Provider({ children }) {
       recipes,
       isFilterOn,
       categories,
+      adviceDrink,
+      adviceMeal,
       setCategories,
       handleChange,
       setFoods,
       setDrinkz,
+      setAdviceDrink,
+      setAdviceMeal,
       submitLogin,
       fetchByQuery,
       fetchRecipes,
       fetchCategories,
       fetchRecipesByCategory,
+      fetchRecipeById,
+      fetchAdviceByFood,
       setRecipes,
       setFilterOn,
     }),
@@ -154,12 +191,18 @@ function Provider({ children }) {
       foods,
       recipes,
       isFilterOn,
+      adviceDrink,
+      adviceMeal,
       setFilterOn,
+      setAdviceDrink,
+      setAdviceMeal,
       handleChange,
       submitLogin,
       setCategories,
       fetchCategories,
       fetchRecipesByCategory,
+      fetchRecipeById,
+      fetchAdviceByFood,
     ],
   );
 

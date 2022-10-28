@@ -127,18 +127,16 @@ function Provider({ children }) {
     return recipe;
   }, []);
 
-  const fetchAdviceByFood = useCallback(
-    async (page) => {
-      let data;
-      if (page === 'meals') {
-        data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-        setAdviceDrink(await data.json());
-      } else if (page === 'drinks') {
-        data = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-        setAdviceMeal(await data.json());
-      }
-    },
-  );
+  const fetchAdviceByFood = useCallback(async (page) => {
+    let data;
+    if (page === 'meals') {
+      data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+      setAdviceDrink(await data.json());
+    } else if (page === 'drinks') {
+      data = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      setAdviceMeal(await data.json());
+    }
+  }, []);
 
   const handleChange = useCallback(
     ({ target }) => {

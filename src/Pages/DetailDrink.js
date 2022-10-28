@@ -108,7 +108,7 @@ function DetailDrink(prop) {
           >
             Start Recipe
           </button>
-          {isRedirectDrink && <Redirect to="drinks/:id/in-progress" /> }
+          {isRedirectDrink && <Redirect to={ `drinks/${id}/in-progress"` } /> }
         </div>
       ) : (
         <h1>Carregando...</h1>

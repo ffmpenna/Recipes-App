@@ -11,6 +11,7 @@ function DetailMeal(meals) {
   const { params } = match;
   const { id } = params;
   const magicNumber = 6;
+
   const [isRedirect, setIsRedirect] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,6 @@ function DetailMeal(meals) {
     async function fetchMyAdviceAPI() {
       await fetchAdviceByFood('meals');
     }
-    console.log(adviceDrink);
     fetchMyAdviceAPI();
   }, []);
 
@@ -51,7 +51,7 @@ function DetailMeal(meals) {
   const handleRedirect = () => {
     setIsRedirect(true);
   };
-
+  console.log(adviceDrink);
   return (
     <div>
       {meal ? (
@@ -105,7 +105,7 @@ function DetailMeal(meals) {
           >
             Start Recipe
           </button>
-          {isRedirect && <Redirect to="/meals/:id/in-progress" />}
+          {isRedirect && <Redirect to={ `/meals/${id}/in-progress` } />}
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -19,6 +19,8 @@ function Provider({ children }) {
     allCategories: [],
     selectedCategory: '',
   });
+  const [adviceDrink, setAdviceDrink] = useState({ drink: [] });
+  const [adviceMeal, setAdviceMeal] = useState({ meal: [] });
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -125,20 +127,18 @@ function Provider({ children }) {
     return recipe;
   }, []);
 
-  const adviceRecibeByFood = useCallback(async (page) => {
-    let data;
-    if (page === 'meals') {
-      data = await fetch(
-        'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=',
-      );
-    } else if (page === 'drinks') {
-      data = await fetch(
-        'https://www.themealdb.com/api/json/v1/1/search.php?s=',
-      );
-    }
-    const advice = await data.json();
-    return advice;
-  }, []);
+  const fetchAdviceByFood = useCallback(
+    async (page) => {
+      let data;
+      if (page === 'meals') {
+        data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+        setAdviceDrink({ drink: await data.json() });
+      } else if (page === 'drinks') {
+        data = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+        setAdviceMeal({ meal: await data.json() });
+      }
+    },
+  );
 
   const handleChange = useCallback(
     ({ target }) => {
@@ -167,17 +167,21 @@ function Provider({ children }) {
       recipes,
       isFilterOn,
       categories,
+      adviceDrink,
+      adviceMeal,
       setCategories,
       handleChange,
       setFoods,
       setDrinkz,
+      setAdviceDrink,
+      setAdviceMeal,
       submitLogin,
       fetchByQuery,
       fetchRecipes,
       fetchCategories,
       fetchRecipesByCategory,
       fetchRecipeById,
-      adviceRecibeByFood,
+      fetchAdviceByFood,
       setRecipes,
       setFilterOn,
     }),
@@ -189,14 +193,18 @@ function Provider({ children }) {
       foods,
       recipes,
       isFilterOn,
+      adviceDrink,
+      adviceMeal,
       setFilterOn,
+      setAdviceDrink,
+      setAdviceMeal,
       handleChange,
       submitLogin,
       setCategories,
       fetchCategories,
       fetchRecipesByCategory,
       fetchRecipeById,
-      adviceRecibeByFood,
+      fetchAdviceByFood,
     ],
   );
 

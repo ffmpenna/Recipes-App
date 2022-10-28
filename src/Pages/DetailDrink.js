@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
+import '../App.css';
 // import PropTypes from 'prop-types'
 
 function DetailDrink(prop) {
-  const { fetchRecipeById, fetchAdviceByFood } = useContext(MyContext);
+  const { fetchRecipeById, fetchAdviceByFood, adviceMeal } = useContext(MyContext);
   const [detailDrink, setDetailDrink] = useState({ drinks: [] });
   const { match } = prop;
   const { params } = match;
   const { id } = params;
+  const magicNumber = 6;
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -37,14 +39,14 @@ function DetailDrink(prop) {
     const ingredientsList = ingredients.map((ingredient, i) => (measure[i] ? (
       <p
         data-testid={ `${i}-ingredient-name-and-measure` }
-        key={ `igredient_${i}` }
+        key={ `ingredient_${i}` }
       >
-        { `${measure[i]} - ${ingredient}`}
+        { measure !== '' && `${measure[i]} - ${ingredient}`}
       </p>
     ) : (
       <p
         data-testid={ `${i}-ingredient-name-and-measure` }
-        key={ `igredient_${i}` }
+        key={ `ingredient_${i}` }
       >
         {`${ingredient}`}
       </p>
@@ -52,7 +54,7 @@ function DetailDrink(prop) {
 
     return ingredientsList;
   };
-  console.log(drink);
+  console.log(adviceMeal.meal.meals);
   return (
     <div>
       {drink ? (
@@ -65,10 +67,34 @@ function DetailDrink(prop) {
             src={ drink.strDrinkThumb }
             alt={ drink.strDrink }
           />
-          <p data-testid="recipe-category">{drink.strCategory}</p>
           <p data-testid="recipe-category">{drink.strAlcoholic}</p>
           <p data-testid="instructions">{drink.strInstructions}</p>
           {loadIngredients()}
+
+          <h1 className="header">Recomendações</h1>
+          <div className="horizontal-slider">
+            <div className="slider-container">
+              { adviceMeal.meal.meals.splice(0, magicNumber).map((recom, i) => (
+                <div
+                  className="item"
+                  data-testid={ `${i}-recommendation-card` }
+                  key={ recom.strMeal }
+                >
+                  <h3
+                    data-testid={ `${i}-recommendation-title` }
+                  >
+                    {recom.strMeal}
+                  </h3>
+                  <img
+                    className="images"
+                    src={ recom.strMealThumb }
+                    alt={ recom.strMeal }
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -1,6 +1,7 @@
 // import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
+import '../App.css';
 
 function DetailMeal(meals) {
   const { fetchRecipeById, fetchAdviceByFood, adviceDrink } = useContext(MyContext);
@@ -8,6 +9,7 @@ function DetailMeal(meals) {
   const { match } = meals;
   const { params } = match;
   const { id } = params;
+  const magicNumber = 6;
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -37,7 +39,7 @@ function DetailMeal(meals) {
 
     const ingredientsList = ingredients.map((ingredient, i) => (
       <p key={ `ingredient_${i}` } data-testid={ `${i}-ingredient-name-and-measure` }>
-        {`${measure[i]} ${ingredient}`}
+        { measure !== '' && `${measure[i]} ${ingredient}`}
       </p>
     ));
 
@@ -66,6 +68,29 @@ function DetailMeal(meals) {
             Video
           </iframe>
           {loadIngredients()}
+          <h1 className="header">Recomendações</h1>
+          <div className="horizontal-slider">
+            <div className="slider-container">
+              { adviceDrink.drink.drinks.splice(0, magicNumber).map((recom, i) => (
+                <div
+                  className="item"
+                  data-testid={ `${i}-recommendation-card` }
+                  key={ recom.strDrink }
+                >
+                  <h3
+                    data-testid={ `${i}-recommendation-title` }
+                  >
+                    {recom.strDrink}
+                  </h3>
+                  <img
+                    className="images"
+                    src={ recom.strDrinkThumb }
+                    alt={ recom.strDrink }
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       ) : (
         <h1>Carregando...</h1>

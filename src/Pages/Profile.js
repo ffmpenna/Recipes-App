@@ -6,7 +6,7 @@ import Footer from './Footer';
 
 function Profile() {
   const history = useHistory();
-  const { email } = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const redirectTo = (endpoint) => {
     if (endpoint === 'logout') {
@@ -19,7 +19,7 @@ function Profile() {
   return (
     <div>
       <Header title="Profile" withoutSearch />
-      {email && <p data-testid="profile-email">{email}</p>}
+      {user && <p data-testid="profile-email">{user.email}</p>}
       <button
         type="button"
         onClick={ () => redirectTo('done-recipes') }

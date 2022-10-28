@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 import '../App.css';
 // import PropTypes from 'prop-types'
@@ -10,6 +11,7 @@ function DetailDrink(prop) {
   const { params } = match;
   const { id } = params;
   const magicNumber = 6;
+  const [isRedirectDrink, setIsRedirectDrink] = useState(false);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -55,6 +57,10 @@ function DetailDrink(prop) {
     return ingredientsList;
   };
 
+  const handleRedirectDrink = () => {
+    setIsRedirectDrink(true);
+  };
+
   return (
     <div>
       {drink ? (
@@ -95,12 +101,14 @@ function DetailDrink(prop) {
             </div>
           </div>
           <button
+            onClick={ handleRedirectDrink }
             data-testid="start-recipe-btn"
             className="button footer-container"
             type="button"
           >
             Start Recipe
           </button>
+          {isRedirectDrink && <Redirect to="drinks/:id/in-progress" /> }
         </div>
       ) : (
         <h1>Carregando...</h1>

@@ -45,7 +45,7 @@ function DetailMeal(meals) {
 
     return ingredientsList;
   };
-
+  console.log(adviceDrink);
   return (
     <div>
       {meal ? (
@@ -71,7 +71,7 @@ function DetailMeal(meals) {
           <h1 className="header">Recomendações</h1>
           <div className="horizontal-slider">
             <div className="slider-container">
-              { adviceDrink.drink.drinks.splice(0, magicNumber).map((recom, i) => (
+              { adviceDrink.drinks.splice(0, magicNumber).map((recom, i) => (
                 <div
                   className="item"
                   data-testid={ `${i}-recommendation-card` }

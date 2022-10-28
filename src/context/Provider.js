@@ -19,8 +19,8 @@ function Provider({ children }) {
     allCategories: [],
     selectedCategory: '',
   });
-  const [adviceDrink, setAdviceDrink] = useState({ drink: [] });
-  const [adviceMeal, setAdviceMeal] = useState({ meal: [] });
+  const [adviceDrink, setAdviceDrink] = useState({});
+  const [adviceMeal, setAdviceMeal] = useState({});
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -132,10 +132,10 @@ function Provider({ children }) {
       let data;
       if (page === 'meals') {
         data = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-        setAdviceDrink({ drink: await data.json() });
+        setAdviceDrink(await data.json());
       } else if (page === 'drinks') {
         data = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-        setAdviceMeal({ meal: await data.json() });
+        setAdviceMeal(await data.json());
       }
     },
   );

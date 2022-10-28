@@ -54,7 +54,7 @@ function DetailDrink(prop) {
 
     return ingredientsList;
   };
-  console.log(adviceMeal.meal.meals);
+
   return (
     <div>
       {drink ? (
@@ -74,21 +74,21 @@ function DetailDrink(prop) {
           <h1 className="header">Recomendações</h1>
           <div className="horizontal-slider">
             <div className="slider-container">
-              { adviceMeal.meal.meals.splice(0, magicNumber).map((recom, i) => (
+              { adviceMeal.meals.splice(0, magicNumber).map((recomend, i) => (
                 <div
                   className="item"
                   data-testid={ `${i}-recommendation-card` }
-                  key={ recom.strMeal }
+                  key={ recomend.strMeal }
                 >
                   <h3
                     data-testid={ `${i}-recommendation-title` }
                   >
-                    {recom.strMeal}
+                    {recomend.strMeal}
                   </h3>
                   <img
                     className="images"
-                    src={ recom.strMealThumb }
-                    alt={ recom.strMeal }
+                    src={ recomend.strMealThumb }
+                    alt={ recomend.strMeal }
                   />
                 </div>
               ))}

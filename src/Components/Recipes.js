@@ -9,30 +9,27 @@ function Recipes({ page }) {
   const history = useHistory();
 
   const {
-    foods,
-    drinkz,
     isFilterOn,
-    fetchRecipes,
     recipes,
     categories,
-    fetchCategories,
     setCategories,
+    fetchRecipes,
     fetchRecipesByCategory,
   } = useContext(MyContext);
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetchRecipes();
+    }
+    fetchData();
+  }, [page]);
 
   const MAX_DISPLAY = 12;
   const LENGTH = 5;
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      await fetchRecipes(page);
-    }
-    fetchMyAPI();
-  }, [page]);
-
-  const displayCards = (array, type) => {
+  const displayCards = (array, type, quantity) => {
     if (type === 'meals') {
-      return array.map((recipe, index) => (
+      return array.slice(0, quantity).map((recipe, index) => (
         <FoodCard
           key={ index }
           index={ index }
@@ -43,7 +40,7 @@ function Recipes({ page }) {
       ));
     }
     if (type === 'drinks') {
-      return array.map((recipe, index) => (
+      return array.slice(0, quantity).map((recipe, index) => (
         <DrinkCard
           key={ index }
           index={ index }
@@ -55,22 +52,14 @@ function Recipes({ page }) {
     }
   };
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      await fetchCategories(page);
-    }
-    fetchMyAPI();
-  }, [page]);
-
   const selectCategory = async ({ target }) => {
     const { value } = target;
     await setCategories({ ...categories, selectedCategory: value });
-    console.log(categories.selectedCategory);
     if (value !== categories.selectedCategory) {
       fetchRecipesByCategory(page, value);
     } else {
       setCategories({ ...categories, selectedCategory: '' });
-      fetchRecipes(page);
+      fetchRecipesByCategory(page, 'all');
     }
   };
 
@@ -79,7 +68,7 @@ function Recipes({ page }) {
       <div>
         {categories.allCategories[page]
           && categories.allCategories[page]
-            .slice(0, LENGTH)
+            .filter((_e, i) => i < LENGTH)
             .map((category, index) => (
               <label htmlFor={ `${category}${index}` } key={ index }>
                 <input
@@ -98,37 +87,37 @@ function Recipes({ page }) {
         className="button"
         data-testid="All-category-filter"
         type="button"
-        onClick={ async () => fetchRecipes(page) }
+        onClick={ async () => fetchRecipesByCategory(page, 'all') }
       >
         All
       </button>
       {isFilterOn ? (
         <div>
-          <div disabled={ page === 'drinks' }>
-            {foods && foods.length > 1
-              ? displayCards(foods, 'meals')
-              : foods
-                && foods.length === 1
-                && history.push(`/meals/${foods[0].idMeal}`)}
-          </div>
+          <h1>filtro on</h1>
           <div>
-            {drinkz && drinkz.length > 1
-              ? displayCards(drinkz, 'drinks')
-              : drinkz
-                && drinkz.length === 1
-                && history.push(`/drinks/${drinkz[0].idDrink}`)}
+            {recipes[page] ? (
+              displayCards(recipes[page], page, MAX_DISPLAY)
+            ) : (
+              <h1>Carregando...</h1>
+            )}
+            {recipes.drinks.length === 1
+              && history.push(`/drinks/${recipes.drinks[0].idDrink}`)}
+            {recipes.meals.length === 1
+              && history.push(`/meals/${recipes.meals[0].idMeal}`)}
           </div>
         </div>
       ) : (
         <div>
-          <div>
-            {recipes.meals
-              && displayCards(recipes.meals.slice(0, MAX_DISPLAY), 'meals')}
-          </div>
-          <div>
-            {recipes.drinks
-              && displayCards(recipes.drinks.slice(0, MAX_DISPLAY), 'drinks')}
-          </div>
+          <h1>filtro off</h1>
+          {recipes.meals && page === 'meals' ? (
+            <div>
+              {displayCards(recipes.meals, 'meals', MAX_DISPLAY)}
+            </div>
+          ) : (
+            <div>
+              {displayCards(recipes.drinks, 'drinks', MAX_DISPLAY)}
+            </div>
+          )}
         </div>
       )}
     </div>

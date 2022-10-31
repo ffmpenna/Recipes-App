@@ -1,8 +1,8 @@
 import React from 'react';
+import Footer from '../Components/Footer';
 import Header from '../Components/Header';
 import Recipes from '../Components/Recipes';
 import SearchBar from '../Components/SearchBar';
-import Footer from './Footer';
 // import PropTypes from 'prop-types'
 
 function Drinks() {

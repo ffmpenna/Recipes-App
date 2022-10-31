@@ -49,42 +49,45 @@ function Provider({ children }) {
     fetchData();
   }, []);
 
-  const fetchByQuery = useCallback(async (query, searchInput, page, history) => {
-    let data;
-    const linkToFetch = page === 'meals' ? 'themealdb' : 'thecocktaildb';
-    if (query === 'first-letter') {
-      if (searchInput.length !== 1) {
-        global.alert('Your search must have only 1 (one) character');
-        data = { [page]: null };
-      } else if (searchInput.length === 1) {
+  const fetchByQuery = useCallback(
+    async (query, searchInput, page, history) => {
+      let data;
+      const linkToFetch = page === 'meals' ? 'themealdb' : 'thecocktaildb';
+      if (query === 'first-letter') {
+        if (searchInput.length !== 1) {
+          global.alert('Your search must have only 1 (one) character');
+          data = { [page]: null };
+        } else if (searchInput.length === 1) {
+          const response = await fetch(
+            `https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`,
+          );
+          data = await response.json();
+          console.log(data);
+        }
+      } else if (query === 'ingredient') {
         const response = await fetch(
-          `https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`,
+          `https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`,
         );
         data = await response.json();
-        console.log(data);
+      } else if (query === 'name') {
+        const response = await fetch(
+          `https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`,
+        );
+        data = await response.json();
       }
-    } else if (query === 'ingredient') {
-      const response = await fetch(
-        `https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`,
-      );
-      data = await response.json();
-    } else if (query === 'name') {
-      const response = await fetch(
-        `https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`,
-      );
-      data = await response.json();
-    }
-    if (data[page] === null) {
-      global.alert(errString);
-    } else if (page === 'meals' && data[page].length === 1) {
-      console.log(data[page]);
-      history.push(`/meals/${data[page][0].idMeal}`);
-    } else if (page === 'drinks' && data[page].length === 1) {
-      history.push(`/drinks/${data[page][0].idDrink}`);
-    } else {
-      setRecipes({ ...recipes, [page]: data[page] });
-    }
-  }, []);
+      if (data[page] === null) {
+        global.alert(errString);
+      } else if (page === 'meals' && data[page].length === 1) {
+        console.log(data[page]);
+        history.push(`/meals/${data[page][0].idMeal}`);
+      } else if (page === 'drinks' && data[page].length === 1) {
+        history.push(`/drinks/${data[page][0].idDrink}`);
+      } else {
+        setRecipes({ ...recipes, [page]: data[page] });
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -145,6 +148,13 @@ function Provider({ children }) {
     }
     const recipe = await data.json();
     return recipe;
+  }, []);
+
+  useEffect(() => {
+    const data = localStorage.getItem('favoriteRecipes');
+    if (!data) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    }
   }, []);
 
   const handleChange = useCallback(

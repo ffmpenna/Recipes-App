@@ -10,7 +10,9 @@ const copy = require('clipboard-copy');
 
 function DetailDrink() {
   const { id } = useParams();
-  const { location: { pathname } } = useHistory();
+  const {
+    location: { pathname },
+  } = useHistory();
   const { fetchRecipeById, fetchRecipes, recipes } = useContext(MyContext);
   const [detailDrink, setDetailDrink] = useState({ drinks: [] });
   const [isRedirectDrink, setIsRedirectDrink] = useState(false);
@@ -77,8 +79,38 @@ function DetailDrink() {
     }
   }, [drink, pathname]);
 
+  const readFavorites = () => JSON.parse(localStorage.getItem('favoriteRecipes'));
+
+  const addFavoriteRecipe = (recipe) => {
+    const { idDrink, strCategory, strAlcoholic, strDrink, strDrinkThumb } = recipe;
+
+    const favRecipe = {
+      id: idDrink,
+      type: 'drink',
+      nationality: '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic,
+      name: strDrink,
+      image: strDrinkThumb,
+    };
+
+    const prevData = readFavorites();
+
+    localStorage.setItem(
+      'favoriteRecipes',
+      JSON.stringify([...prevData, favRecipe]),
+    );
+  };
+
+  const removeFavoriteRecipe = (recipe) => {
+    const prevData = readFavorites();
+    const array = prevData.filter((e) => e.id !== recipe.idDrink);
+    localStorage.setItem('favoriteRecipes', JSON.stringify([...array]));
+  };
+
   return (
     <div>
+      {isChecked ? (<h1>check</h1>) : (<h1>uncheck</h1>)}
       {drink ? (
         <div>
           <h2 data-testid="recipe-title">
@@ -89,6 +121,7 @@ function DetailDrink() {
                 id="favoriteBtn"
                 src={ whiteHeartIcon }
                 data-testid="favorite-btn"
+                onClick={ () => addFavoriteRecipe(drink) }
               >
                 <img src={ whiteHeartIcon } alt="favorite-icon" />
               </button>

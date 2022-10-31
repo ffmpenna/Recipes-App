@@ -72,6 +72,21 @@ function DetailMeal() {
     }
   }, [meal, pathname]);
 
+  const favoriteFunction = () => {
+    const {
+      idDrink,
+      type,
+      nationality,
+      category,
+      alcoholicOrNot,
+      name,
+      image,
+    } = meal;
+    console.log(
+      meal,
+    );
+  };
+
   return (
     <div>
       {meal ? (
@@ -84,6 +99,7 @@ function DetailMeal() {
                 id="favoriteBtn"
                 src={ whiteHeartIcon }
                 data-testid="favorite-btn"
+                onClick={ favoriteFunction }
               >
                 <img src={ whiteHeartIcon } alt="favorite-icon" />
               </button>

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import '../App.css';
 import MyContext from '../context/MyContext';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
@@ -10,6 +11,7 @@ const copy = require('clipboard-copy');
 
 function DetailMeal() {
   const { id } = useParams();
+  const readFavorites = () => JSON.parse(localStorage.getItem('favoriteRecipes'));
   const {
     location: { pathname },
   } = useHistory();
@@ -17,6 +19,9 @@ function DetailMeal() {
   const [detailMeal, setDetailMeal] = useState({ meals: [] });
   const [isRedirect, setIsRedirect] = useState(false);
   const [isCopied, setCopy] = useState(false);
+  const [isCheck, setCheck] = useState(
+    readFavorites() ? readFavorites().some((e) => e.id === id) : false,
+  );
   const SIX = 6;
 
   useEffect(() => {
@@ -72,23 +77,55 @@ function DetailMeal() {
     }
   }, [meal, pathname]);
 
-  const favoriteFunction = () => {
+  const mountObj = (obj) => {
     const {
-      idDrink,
-      type,
-      nationality,
-      category,
-      alcoholicOrNot,
-      name,
-      image,
-    } = meal;
-    console.log(
-      meal,
-    );
+      idMeal,
+      strCategory,
+      strArea,
+      strMeal,
+      strMealThumb,
+    } = obj;
+
+    const mountedObj = {
+      id: idMeal,
+      type: 'meal',
+      nationality: strArea,
+      category: strCategory,
+      alcoholicOrNot: '',
+      name: strMeal,
+      image: strMealThumb,
+    };
+
+    return mountedObj;
+  };
+
+  const saveFavorite = (recipe) => localStorage
+    .setItem('favoriteRecipes', JSON.stringify(recipe));
+
+  const addRecipe = (recipe) => {
+    const favoriteRecipes = readFavorites();
+    saveFavorite([...favoriteRecipes, mountObj(recipe)]);
+  };
+
+  const removeRecipe = () => {
+    const favoriteRecipes = readFavorites();
+    saveFavorite(favoriteRecipes.filter((r) => r.id !== id));
+  };
+
+  const handleFavorite = (recipe) => {
+    console.log(readFavorites(), id);
+    if (isCheck) {
+      removeRecipe();
+      setCheck(false);
+    } else {
+      addRecipe(recipe);
+      setCheck(true);
+    }
   };
 
   return (
     <div>
+      {isCheck ? <h1>true</h1> : <h1>false</h1>}
       {meal ? (
         <div>
           <h2 data-testid="recipe-title">
@@ -97,11 +134,14 @@ function DetailMeal() {
               <button
                 type="button"
                 id="favoriteBtn"
-                src={ whiteHeartIcon }
+                src={ isCheck ? blackHeartIcon : whiteHeartIcon }
                 data-testid="favorite-btn"
-                onClick={ favoriteFunction }
+                onClick={ () => handleFavorite(meal) }
               >
-                <img src={ whiteHeartIcon } alt="favorite-icon" />
+                <img
+                  src={ isCheck ? blackHeartIcon : whiteHeartIcon }
+                  alt="favorite-icon"
+                />
               </button>
               <button
                 type="button"

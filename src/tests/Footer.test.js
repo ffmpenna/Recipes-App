@@ -1,9 +1,9 @@
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import userEvent from '@testing-library/user-event';
-import { screen } from '@testing-library/react';
+import Footer from '../Components/Footer';
 import renderWithProvider from './helper/renderWithProvider';
-import Footer from '../Pages/Footer';
 
 describe('testa o componente Footer', () => {
   it('testa se existem o elementos no componente', () => {

@@ -1,8 +1,8 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Footer from '../Components/Footer';
 import Header from '../Components/Header';
-import Footer from './Footer';
 
 function Profile() {
   const history = useHistory();

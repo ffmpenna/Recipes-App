@@ -1,30 +1,34 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import '../App.css';
 import MyContext from '../context/MyContext';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+
+const copy = require('clipboard-copy');
 // import PropTypes from 'prop-types'
 
-function DetailDrink(prop) {
-  const { fetchRecipeById, fetchAdviceByFood, adviceMeal } = useContext(MyContext);
+function DetailDrink() {
+  const { id } = useParams();
+  const { location: { pathname } } = useHistory();
+  const { fetchRecipeById, fetchRecipes, recipes } = useContext(MyContext);
   const [detailDrink, setDetailDrink] = useState({ drinks: [] });
-  const { match } = prop;
-  const { params } = match;
-  const { id } = params;
-  const magicNumber = 6;
   const [isRedirectDrink, setIsRedirectDrink] = useState(false);
+  const [isCopied, setCopy] = useState(false);
+  const SIX = 6;
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetchRecipes();
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function fetchMyAPI() {
       setDetailDrink(await fetchRecipeById('drinks', id));
     }
     fetchMyAPI();
-  }, []);
-
-  useEffect(() => {
-    async function fetchMyAdviceAPI() {
-      await fetchAdviceByFood('drinks');
-    }
-    fetchMyAdviceAPI();
   }, []);
 
   const drink = detailDrink.drinks[0];
@@ -61,13 +65,44 @@ function DetailDrink(prop) {
     setIsRedirectDrink(true);
   };
 
-  console.log(adviceMeal);
+  useEffect(() => {
+    const copyBtn = document.getElementById('copyBtn');
+    const url = `http://localhost:3000${pathname}`;
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        copy(url);
+        setCopy(true);
+        global.alert('Link copiado!');
+      });
+    }
+  }, [drink, pathname]);
 
   return (
     <div>
       {drink ? (
         <div>
-          <h2 data-testid="recipe-title">{drink.strDrink}</h2>
+          <h2 data-testid="recipe-title">
+            {drink.strDrink}
+            <span>
+              <button
+                type="button"
+                id="favoriteBtn"
+                src={ whiteHeartIcon }
+                data-testid="favorite-btn"
+              >
+                <img src={ whiteHeartIcon } alt="favorite-icon" />
+              </button>
+              <button
+                type="button"
+                id="copyBtn"
+                src={ shareIcon }
+                data-testid="share-btn"
+              >
+                <img src={ shareIcon } alt="share-icon" />
+              </button>
+            </span>
+            {isCopied && <span>Link copied!</span>}
+          </h2>
           <img
             data-testid="recipe-photo"
             height="325"
@@ -78,13 +113,13 @@ function DetailDrink(prop) {
           <p data-testid="recipe-category">{drink.strAlcoholic}</p>
           <p data-testid="instructions">{drink.strInstructions}</p>
           {loadIngredients()}
-          {adviceMeal.meals && (
+          {recipes.meals && (
             <div>
               <h1 className="header">Recomendações</h1>
               <div className="horizontal-slider">
                 <div className="slider-container">
-                  {adviceMeal.meals
-                    .splice(0, magicNumber)
+                  {recipes.meals
+                    .filter((_e, i) => i < SIX)
                     .map((recomend, i) => (
                       <div
                         className="item"

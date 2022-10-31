@@ -1,31 +1,36 @@
 // import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import '../App.css';
 import MyContext from '../context/MyContext';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
-function DetailMeal(meals) {
-  const { fetchRecipeById, fetchAdviceByFood, adviceDrink } = useContext(MyContext);
+const copy = require('clipboard-copy');
+
+function DetailMeal() {
+  const { id } = useParams();
+  const {
+    location: { pathname },
+  } = useHistory();
+  const { fetchRecipeById, fetchRecipes, recipes } = useContext(MyContext);
   const [detailMeal, setDetailMeal] = useState({ meals: [] });
-  const { match } = meals;
-  const { params } = match;
-  const { id } = params;
-  const magicNumber = 6;
-
   const [isRedirect, setIsRedirect] = useState(false);
+  const [isCopied, setCopy] = useState(false);
+  const SIX = 6;
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetchRecipes();
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function fetchMyAPI() {
       setDetailMeal(await fetchRecipeById('meals', id));
     }
     fetchMyAPI();
-  }, []);
-
-  useEffect(() => {
-    async function fetchMyAdviceAPI() {
-      await fetchAdviceByFood('meals');
-    }
-    fetchMyAdviceAPI();
   }, []);
 
   const meal = detailMeal.meals[0];
@@ -54,12 +59,45 @@ function DetailMeal(meals) {
   const handleRedirect = () => {
     setIsRedirect(true);
   };
-  console.log(adviceDrink.drinks);
+
+  useEffect(() => {
+    const copyBtn = document.getElementById('copyBtn');
+    const url = `http://localhost:3000${pathname}`;
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        copy(url);
+        setCopy(true);
+        global.alert('Link copiado!');
+      });
+    }
+  }, [meal, pathname]);
+
   return (
     <div>
       {meal ? (
         <div>
-          <h2 data-testid="recipe-title">{meal.strMeal}</h2>
+          <h2 data-testid="recipe-title">
+            {meal.strMeal}
+            <span>
+              <button
+                type="button"
+                id="favoriteBtn"
+                src={ whiteHeartIcon }
+                data-testid="favorite-btn"
+              >
+                <img src={ whiteHeartIcon } alt="favorite-icon" />
+              </button>
+              <button
+                type="button"
+                id="copyBtn"
+                src={ shareIcon }
+                data-testid="share-btn"
+              >
+                <img src={ shareIcon } alt="share-icon" />
+              </button>
+            </span>
+            {isCopied && <span>Link copied!</span>}
+          </h2>
           <img
             data-testid="recipe-photo"
             height="325"
@@ -77,28 +115,29 @@ function DetailMeal(meals) {
             Video
           </iframe>
           {loadIngredients()}
-          {adviceDrink.drinks && (
+          {recipes.drinks && (
             <div>
-              {' '}
               <h1 className="header">Recomendações</h1>
               <div className="horizontal-slider">
                 <div className="slider-container">
-                  {adviceDrink.drinks.splice(0, magicNumber).map((recom, i) => (
-                    <div
-                      className="item"
-                      data-testid={ `${i}-recommendation-card` }
-                      key={ recom.strDrink }
-                    >
-                      <h3 data-testid={ `${i}-recommendation-title` }>
-                        {recom.strDrink}
-                      </h3>
-                      <img
-                        className="images"
-                        src={ recom.strDrinkThumb }
-                        alt={ recom.strDrink }
-                      />
-                    </div>
-                  ))}
+                  {recipes.drinks
+                    .filter((_e, i) => i < SIX)
+                    .map((recom, i) => (
+                      <div
+                        className="item"
+                        data-testid={ `${i}-recommendation-card` }
+                        key={ recom.strDrink }
+                      >
+                        <h3 data-testid={ `${i}-recommendation-title` }>
+                          {recom.strDrink}
+                        </h3>
+                        <img
+                          className="images"
+                          src={ recom.strDrinkThumb }
+                          alt={ recom.strDrink }
+                        />
+                      </div>
+                    ))}
                 </div>
               </div>
               <button
@@ -111,7 +150,6 @@ function DetailMeal(meals) {
               </button>
             </div>
           )}
-
           {isRedirect && <Redirect to={ `/meals/${id}/in-progress` } />}
         </div>
       ) : (

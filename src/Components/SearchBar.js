@@ -1,34 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import MyContext from '../context/MyContext';
 
 export default function SearchBar({ page }) {
-  const {
-    fetchByQuery, handleChange,
-    loginInfo, setFoods,
-    setDrinkz, setFilterOn,
-  } = useContext(MyContext);
+  const history = useHistory();
+  const { fetchByQuery, handleChange, loginInfo } = useContext(MyContext);
 
   const onBtnClick = async () => {
     const { radioBtn, searchInput } = loginInfo;
-    const results = await fetchByQuery(radioBtn, searchInput, page);
-    const doze = 12;
-    if (results) {
-      const { meals } = results;
-      const { drinks } = results;
-      setFilterOn(true);
-      if (meals && page === 'meals') {
-        const dozeReceitas = meals.slice(0, doze);
-        setFoods(dozeReceitas);
-      } else if (drinks && page === 'drinks') {
-        const dozeReceitas = drinks.slice(0, doze);
-        setDrinkz(dozeReceitas);
-      } else {
-        global.alert('Sorry, we haven\'t found any recipes for these filters.');
-        setFilterOn(false);
-      }
-    }
+    await fetchByQuery(radioBtn, searchInput, page, history);
   };
 
   return (

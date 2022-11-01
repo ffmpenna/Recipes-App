@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -33,7 +33,6 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
       setCopy(true);
     }
   };
-
   const handleFavorite = useCallback(() => {
     const recipe = {
       id: recipes.idMeal ? recipes.idMeal : recipes.idDrink,
@@ -92,5 +91,17 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
     </div>
   );
 }
+
+ShareAndFavoriteBtn.propTypes = {
+  idMeal: PropTypes.string,
+  idDrink: PropTypes.string,
+  strArea: PropTypes.string,
+  strCategory: PropTypes.string,
+  strAlcoholic: PropTypes.string,
+  strMeal: PropTypes.string,
+  strDrink: PropTypes.string,
+  strMealThumb: PropTypes.string,
+  strDrinkThumb: PropTypes.string,
+}.isRequired;
 
 export default ShareAndFavoriteBtn;

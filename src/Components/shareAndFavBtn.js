@@ -66,11 +66,11 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
     <div>
       <button
         type="button"
-        data-testid="share-btn"
+        data-testid={ testId[0] }
         src={ shareIcon }
         onClick={ () => clipboardLink(page) }
       >
-        <img src={ shareIcon } alt="share-btn" data-testid={ testId[1] } />
+        <img src={ shareIcon } alt="share-btn" />
       </button>
       <button
         type="button"
@@ -78,11 +78,10 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
         src={ isCheck ? blackHeartIcon : whiteHeartIcon }
       >
         {isCheck ? (
-          <img src={ blackHeartIcon } alt="favorite" data-testid={ testId[0] } />
+          <img src={ blackHeartIcon } alt="favorite" data-testid={ testId[1] } />
         ) : (
-          <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[0] } />
+          <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[1] } />
         )}
-        ;
       </button>
       {isCopy && (
         <div>

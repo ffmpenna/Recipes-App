@@ -1,27 +1,15 @@
 // import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import '../App.css';
+import ShareAndFavoriteBtn from '../Components/shareAndFavBtn';
 import MyContext from '../context/MyContext';
-import blackHeartIcon from '../images/blackHeartIcon.svg';
-import shareIcon from '../images/shareIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
-
-const copy = require('clipboard-copy');
 
 function DetailMeal() {
   const { id } = useParams();
-  const readFavorites = () => JSON.parse(localStorage.getItem('favoriteRecipes'));
-  const {
-    location: { pathname },
-  } = useHistory();
   const { fetchRecipeById, fetchRecipes, recipes } = useContext(MyContext);
   const [detailMeal, setDetailMeal] = useState({ meals: [] });
   const [isRedirect, setIsRedirect] = useState(false);
-  const [isCopied, setCopy] = useState(false);
-  const [isCheck, setCheck] = useState(
-    readFavorites() ? readFavorites().some((e) => e.id === id) : false,
-  );
   const SIX = 6;
 
   useEffect(() => {
@@ -65,94 +53,18 @@ function DetailMeal() {
     setIsRedirect(true);
   };
 
-  useEffect(() => {
-    const copyBtn = document.getElementById('copyBtn');
-    const url = `http://localhost:3000${pathname}`;
-    if (copyBtn) {
-      copyBtn.addEventListener('click', () => {
-        copy(url);
-        setCopy(true);
-        global.alert('Link copiado!');
-      });
-    }
-  }, [meal, pathname]);
-
-  const mountObj = (obj) => {
-    const {
-      idMeal,
-      strCategory,
-      strArea,
-      strMeal,
-      strMealThumb,
-    } = obj;
-
-    const mountedObj = {
-      id: idMeal,
-      type: 'meal',
-      nationality: strArea,
-      category: strCategory,
-      alcoholicOrNot: '',
-      name: strMeal,
-      image: strMealThumb,
-    };
-
-    return mountedObj;
-  };
-
-  const saveFavorite = (recipe) => localStorage
-    .setItem('favoriteRecipes', JSON.stringify(recipe));
-
-  const addRecipe = (recipe) => {
-    const favoriteRecipes = readFavorites();
-    saveFavorite([...favoriteRecipes, mountObj(recipe)]);
-  };
-
-  const removeRecipe = () => {
-    const favoriteRecipes = readFavorites();
-    saveFavorite(favoriteRecipes.filter((r) => r.id !== id));
-  };
-
-  const handleFavorite = (recipe) => {
-    console.log(readFavorites(), id);
-    if (isCheck) {
-      removeRecipe();
-      setCheck(false);
-    } else {
-      addRecipe(recipe);
-      setCheck(true);
-    }
-  };
-
   return (
     <div>
-      {isCheck ? <h1>true</h1> : <h1>false</h1>}
       {meal ? (
         <div>
           <h2 data-testid="recipe-title">
             {meal.strMeal}
             <span>
-              <button
-                type="button"
-                id="favoriteBtn"
-                src={ isCheck ? blackHeartIcon : whiteHeartIcon }
-                data-testid="favorite-btn"
-                onClick={ () => handleFavorite(meal) }
-              >
-                <img
-                  src={ isCheck ? blackHeartIcon : whiteHeartIcon }
-                  alt="favorite-icon"
-                />
-              </button>
-              <button
-                type="button"
-                id="copyBtn"
-                src={ shareIcon }
-                data-testid="share-btn"
-              >
-                <img src={ shareIcon } alt="share-icon" />
-              </button>
+              <ShareAndFavoriteBtn
+                recipes={ meal }
+                testId={ ['share-btn', 'favorite-btn'] }
+              />
             </span>
-            {isCopied && <span>Link copied!</span>}
           </h2>
           <img
             data-testid="recipe-photo"

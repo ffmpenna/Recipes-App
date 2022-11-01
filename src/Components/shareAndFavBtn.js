@@ -82,6 +82,7 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
         ) : (
           <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[0] } />
         )}
+        ;
       </button>
       {isCopy && (
         <div>

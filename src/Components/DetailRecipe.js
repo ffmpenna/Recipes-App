@@ -60,7 +60,7 @@ function DetailRecipe({ type, page }) {
             alt={ detailRecipe[name] }
           />
           <p data-testid="recipe-category">{detailRecipe[category]}</p>
-          {(type === 'meals' || page === 'in-progress') && (
+          {(type === 'meals' && page !== 'in-progress') && (
             <RecipeVideo type={ type } recipe={ detailRecipe } />
           )}
           <p data-testid="instructions">{detailRecipe[instructions]}</p>

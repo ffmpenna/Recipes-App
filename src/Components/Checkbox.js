@@ -60,7 +60,9 @@ function Checkbox({ index, ingredient, measure, type, recipe }) {
         checked={ checked }
         onChange={ handleChange }
       />
-      {` ${measure[index]} ${ingredient}`}
+      {measure[index] && ingredient
+        ? `${measure[index]} - ${ingredient}`
+        : `${ingredient}`}
     </label>
   );
 }

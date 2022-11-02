@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-export default function FoodCard(props) {
-  const { index, img, name, id } = props;
+export default function RecipeCard(props) {
+  const { index, img, name, id, type } = props;
+  const history = useHistory();
   return (
     <section data-testid={ `${index}-recipe-card` }>
-      <Link
-        to={ `/meals/${id}` }
+      <button
+        type="button"
         data-testid="product-detail-link"
+        onClick={ () => history.push(`/${type}/${id}`) }
       >
-        {/* <link to={ `/meals/${index}` } /> */}
         <img
-          link={ `/meals/${index}` }
           height="200"
           width="200"
           src={ img }
@@ -20,12 +20,12 @@ export default function FoodCard(props) {
           data-testid={ `${index}-card-img` }
         />
         <p data-testid={ `${index}-card-name` }>{name}</p>
-      </Link>
+      </button>
     </section>
   );
 }
 
-FoodCard.propTypes = {
+RecipeCard.propTypes = {
   img: PropTypes.string,
   index: PropTypes.string,
   name: PropTypes.string,

@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import MyContext from '../context/MyContext';
-import DrinkCard from './DrinkCard';
-import FoodCard from './FoodCard';
+import RecipeCard from './RecipeCard';
 
 function Recipes({ page }) {
   const history = useHistory();
@@ -28,30 +27,27 @@ function Recipes({ page }) {
   const LENGTH = 5;
 
   const displayCards = (array, type, quantity) => {
-    if (type === 'meals') {
-      return array.slice(0, quantity).map((recipe, index) => (
-        <FoodCard
-          key={ index }
-          index={ index }
-          name={ recipe.strMeal }
-          img={ recipe.strMealThumb }
-          id={ recipe.idMeal }
-        />
-      ));
-    }
-    if (type === 'drinks') {
-      return array.slice(0, quantity).map((recipe, index) => (
-        <DrinkCard
-          key={ index }
-          index={ index }
-          name={ recipe.strDrink }
-          img={ recipe.strDrinkThumb }
-          id={ recipe.idDrink }
-        />
-      ));
-    }
-  };
+    const attributes = {
+      id: type === 'meals' ? 'idMeal' : 'idDrink',
+      name: type === 'meals' ? 'strMeal' : 'strDrink',
+      thumb: type === 'meals' ? 'strMealThumb' : 'strDrinkThumb',
+    };
 
+    const { name, thumb, id } = attributes;
+
+    return array
+      .filter((_e, i) => i < quantity)
+      .map((recipe, index) => (
+        <RecipeCard
+          key={ index }
+          index={ index }
+          name={ recipe[name] }
+          img={ recipe[thumb] }
+          type={ type }
+          id={ recipe[id] }
+        />
+      ));
+  };
   const selectCategory = async ({ target }) => {
     const { value } = target;
     await setCategories({ ...categories, selectedCategory: value });
@@ -110,13 +106,9 @@ function Recipes({ page }) {
         <div>
           <h1>filtro off</h1>
           {recipes.meals && page === 'meals' ? (
-            <div>
-              {displayCards(recipes.meals, 'meals', MAX_DISPLAY)}
-            </div>
+            <div>{displayCards(recipes.meals, 'meals', MAX_DISPLAY)}</div>
           ) : (
-            <div>
-              {displayCards(recipes.drinks, 'drinks', MAX_DISPLAY)}
-            </div>
+            <div>{displayCards(recipes.drinks, 'drinks', MAX_DISPLAY)}</div>
           )}
         </div>
       )}

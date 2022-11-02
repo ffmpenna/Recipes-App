@@ -1,10 +1,9 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
+import DetailRecipe from '../Components/DetailRecipe';
 
 function DrinkInProgress() {
-  return (
-    <div>DrinkInProgress</div>
-  );
+  return <DetailRecipe type="drinks" page="in-progress" />;
 }
 
 // DrinkInProgress.propTypes = {};

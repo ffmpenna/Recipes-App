@@ -8,6 +8,7 @@ function Provider({ children }) {
     inputPassword: '',
     radioBtn: '',
     searchInput: '',
+    favoriteFilter: 'all',
   });
   const errString = 'Sorry, we haven\'t found any recipes for these filters.';
   const [isDisabled, toggleButton] = useState(true);
@@ -17,6 +18,7 @@ function Provider({ children }) {
     allCategories: {},
     selectedCategory: '',
   });
+  const [isFinished, setFinished] = useState(false);
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -49,42 +51,45 @@ function Provider({ children }) {
     fetchData();
   }, []);
 
-  const fetchByQuery = useCallback(async (query, searchInput, page, history) => {
-    let data;
-    const linkToFetch = page === 'meals' ? 'themealdb' : 'thecocktaildb';
-    if (query === 'first-letter') {
-      if (searchInput.length !== 1) {
-        global.alert('Your search must have only 1 (one) character');
-        data = { [page]: null };
-      } else if (searchInput.length === 1) {
+  const fetchByQuery = useCallback(
+    async (query, searchInput, page, history) => {
+      let data;
+      const linkToFetch = page === 'meals' ? 'themealdb' : 'thecocktaildb';
+      if (query === 'first-letter') {
+        if (searchInput.length !== 1) {
+          global.alert('Your search must have only 1 (one) character');
+          data = { [page]: null };
+        } else if (searchInput.length === 1) {
+          const response = await fetch(
+            `https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`,
+          );
+          data = await response.json();
+          console.log(data);
+        }
+      } else if (query === 'ingredient') {
         const response = await fetch(
-          `https://www.${linkToFetch}.com/api/json/v1/1/search.php?f=${searchInput}`,
+          `https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`,
         );
         data = await response.json();
-        console.log(data);
+      } else if (query === 'name') {
+        const response = await fetch(
+          `https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`,
+        );
+        data = await response.json();
       }
-    } else if (query === 'ingredient') {
-      const response = await fetch(
-        `https://www.${linkToFetch}.com/api/json/v1/1/filter.php?i=${searchInput}`,
-      );
-      data = await response.json();
-    } else if (query === 'name') {
-      const response = await fetch(
-        `https://www.${linkToFetch}.com/api/json/v1/1/search.php?s=${searchInput}`,
-      );
-      data = await response.json();
-    }
-    if (data[page] === null) {
-      global.alert(errString);
-    } else if (page === 'meals' && data[page].length === 1) {
-      console.log(data[page]);
-      history.push(`/meals/${data[page][0].idMeal}`);
-    } else if (page === 'drinks' && data[page].length === 1) {
-      history.push(`/drinks/${data[page][0].idDrink}`);
-    } else {
-      setRecipes({ ...recipes, [page]: data[page] });
-    }
-  }, []);
+      if (data[page] === null) {
+        global.alert(errString);
+      } else if (page === 'meals' && data[page].length === 1) {
+        console.log(data[page]);
+        history.push(`/meals/${data[page][0].idMeal}`);
+      } else if (page === 'drinks' && data[page].length === 1) {
+        history.push(`/drinks/${data[page][0].idDrink}`);
+      } else {
+        setRecipes({ ...recipes, [page]: data[page] });
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -144,7 +149,18 @@ function Provider({ children }) {
       );
     }
     const recipe = await data.json();
-    return recipe;
+    return recipe[page][0];
+  }, []);
+
+  useEffect(() => {
+    const favoriteStorage = localStorage.getItem('favoriteRecipes');
+    if (!favoriteStorage) {
+      localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    }
+    const doneStorage = localStorage.getItem('doneRecipes');
+    if (!doneStorage) {
+      localStorage.setItem('doneRecipes', JSON.stringify([]));
+    }
   }, []);
 
   const handleChange = useCallback(
@@ -172,6 +188,7 @@ function Provider({ children }) {
       recipes,
       isFilterOn,
       categories,
+      isFinished,
       fetchRecipes,
       setCategories,
       handleChange,
@@ -181,6 +198,7 @@ function Provider({ children }) {
       fetchRecipeById,
       setRecipes,
       setFilterOn,
+      setFinished,
     }),
     [
       categories,
@@ -188,6 +206,7 @@ function Provider({ children }) {
       loginInfo,
       recipes,
       isFilterOn,
+      isFinished,
       setFilterOn,
       handleChange,
       submitLogin,

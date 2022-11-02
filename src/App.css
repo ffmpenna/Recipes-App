@@ -168,3 +168,7 @@ input {
 .header {
   text-align: center;
 }
+
+.ingredient-check {
+  text-decoration: line-through solid black;
+}

@@ -27,8 +27,14 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard, type }) {
   }, [recipes]);
 
   const clipboardLink = () => {
-    copy(`http://localhost:3000/${type}/${id}`);
-    setCopy(true);
+    if (page === 'doneRecipes') {
+      console.log(recipes);
+      copy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
+      setCopy(true);
+    } else {
+      copy(`http://localhost:3000/${type}/${id}`);
+      setCopy(true);
+    }
   };
 
   const handleFavorite = useCallback(() => {
@@ -71,17 +77,20 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard, type }) {
       >
         <img src={ shareIcon } alt="share-btn" />
       </button>
-      <button
-        type="button"
-        onClick={ handleFavorite }
-        src={ isCheck ? blackHeartIcon : whiteHeartIcon }
-      >
-        {isCheck ? (
-          <img src={ blackHeartIcon } alt="favorite" data-testid={ testId[0] } />
-        ) : (
-          <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[0] } />
-        )}
-      </button>
+      {page !== 'doneRecipes' && (
+        <button
+          type="button"
+          onClick={ handleFavorite }
+          src={ isCheck ? blackHeartIcon : whiteHeartIcon }
+        >
+          {isCheck ? (
+            <img src={ blackHeartIcon } alt="favorite" data-testid={ testId[0] } />
+          ) : (
+            <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[0] } />
+          )}
+        </button>
+      )}
+
       {isCopy && (
         <div>
           <p>Link copied!</p>

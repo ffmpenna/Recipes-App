@@ -31,6 +31,10 @@ function FinishButton({ type, recipe }) {
   } = attributes;
 
   const handleClick = () => {
+    const now = new Date();
+
+    const date = `${now.getDay()}/${now.getMonth()}/${now.getFullYear()}`;
+
     const finishedRecipe = {
       id: recipe[recipeId],
       nationality: recipe[nationality] ? recipe[nationality] : '',
@@ -40,7 +44,7 @@ function FinishButton({ type, recipe }) {
       tags: recipe[tags] ? recipe[tags].split(',') : [],
       alcoholicOrNot: recipe[alcoholicOrNot] ? recipe[alcoholicOrNot] : '',
       type: recipeType,
-      doneDate: new Date(),
+      doneDate: date,
     };
     addDone(finishedRecipe);
     history.push('/done-recipes');

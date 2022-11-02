@@ -9,6 +9,7 @@ function Provider({ children }) {
     radioBtn: '',
     searchInput: '',
     favoriteFilter: 'all',
+    doneFilter: 'all',
   });
   const errString = 'Sorry, we haven\'t found any recipes for these filters.';
   const [isDisabled, toggleButton] = useState(true);

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
-import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -9,31 +9,30 @@ import { addRecipe, readFavorites, removeRecipe } from '../services/saveRecipe';
 
 const copy = require('clipboard-copy');
 
-function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
-  const {
-    location: { pathname },
-  } = useHistory();
+function ShareAndFavoriteBtn({ recipes, testId, page, hideCard, type }) {
+  const { id } = useParams();
   const [isCopy, setCopy] = useState(false);
-  const [isCheck, setCheck] = useState(
-    readFavorites()
-      ? readFavorites().some(
-        (e) => e.id === recipes.idMeal
+  const [isCheck, setCheck] = useState(false);
+
+  useEffect(() => {
+    if (readFavorites()) {
+      setCheck(
+        readFavorites().some(
+          (e) => e.id === recipes.idMeal
             || e.id === recipes.idDrink
             || e.id === recipes.id,
-      )
-      : false,
-  );
-
-  const clipboardLink = (pageTitle) => {
-    if (pageTitle === 'favoriteRecipes') {
-      copy(`http://localhost:3000/${recipes.type}s/${recipes.id}`);
-      setCopy(true);
-    } else {
-      copy(`http://localhost:3000${pathname}`);
-      setCopy(true);
+        ),
+      );
     }
+  }, [recipes]);
+
+  const clipboardLink = () => {
+    copy(`http://localhost:3000/${type}/${id}`);
+    setCopy(true);
   };
+
   const handleFavorite = useCallback(() => {
+    // console.log(recipes);
     const recipe = {
       id: recipes.idMeal ? recipes.idMeal : recipes.idDrink,
       type: recipes.idMeal ? 'meal' : 'drink',
@@ -60,7 +59,7 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
       addRecipe(recipes);
       setCheck(true);
     }
-  }, [isCheck]);
+  }, [isCheck, recipes]);
 
   return (
     <div>
@@ -68,7 +67,7 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard }) {
         type="button"
         data-testid={ testId[1] }
         src={ shareIcon }
-        onClick={ () => clipboardLink(page) }
+        onClick={ clipboardLink }
       >
         <img src={ shareIcon } alt="share-btn" />
       </button>

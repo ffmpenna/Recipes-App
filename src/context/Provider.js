@@ -18,6 +18,7 @@ function Provider({ children }) {
     allCategories: {},
     selectedCategory: '',
   });
+  const [isFinished, setFinished] = useState(false);
 
   const validateInputs = useCallback(() => {
     const { inputEmail, inputPassword } = loginInfo;
@@ -148,13 +149,17 @@ function Provider({ children }) {
       );
     }
     const recipe = await data.json();
-    return recipe;
+    return recipe[page][0];
   }, []);
 
   useEffect(() => {
-    const data = localStorage.getItem('favoriteRecipes');
-    if (!data) {
+    const favoriteStorage = localStorage.getItem('favoriteRecipes');
+    if (!favoriteStorage) {
       localStorage.setItem('favoriteRecipes', JSON.stringify([]));
+    }
+    const doneStorage = localStorage.getItem('doneRecipes');
+    if (!doneStorage) {
+      localStorage.setItem('doneRecipes', JSON.stringify([]));
     }
   }, []);
 
@@ -183,6 +188,7 @@ function Provider({ children }) {
       recipes,
       isFilterOn,
       categories,
+      isFinished,
       fetchRecipes,
       setCategories,
       handleChange,
@@ -192,6 +198,7 @@ function Provider({ children }) {
       fetchRecipeById,
       setRecipes,
       setFilterOn,
+      setFinished,
     }),
     [
       categories,
@@ -199,6 +206,7 @@ function Provider({ children }) {
       loginInfo,
       recipes,
       isFilterOn,
+      isFinished,
       setFilterOn,
       handleChange,
       submitLogin,

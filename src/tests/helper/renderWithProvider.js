@@ -6,14 +6,9 @@ import Provider from '../../context/Provider';
 
 export default function renderWithProvider(children, route = '/') {
   const history = createMemoryHistory({ initialEntries: [route] });
-  return {
-    ...render(
-      <Router history={ history }>
-        <Provider>
-          { children }
-        </Provider>
-      </Router>,
-    ),
-    history,
-  };
+  return render(
+    <Provider>
+      <Router history={ history }>{children}</Router>
+    </Provider>,
+  );
 }

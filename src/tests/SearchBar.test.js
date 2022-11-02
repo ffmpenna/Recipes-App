@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 // import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+import Header from '../Components/Header';
 import SearchBar from '../Components/SearchBar';
 import renderWithProvider from './helper/renderWithProvider';
 
@@ -37,5 +38,21 @@ describe('Testa o SearchBar', () => {
     expect(radioIngredient).toBeChecked();
     userEvent.click(radioBtn[1]);
     expect(radioIngredient).not.toBeChecked();
+  });
+  it('Testa a função de busca', () => {
+    act(() => {
+      renderWithProvider(<SearchBar />);
+      renderWithProvider(<Header />);
+    });
+
+    const radioFirstLetter = screen.getByTestId('first-letter-search-radio');
+    const inputTextPesquisa = screen.getByTestId('search-top-btn');
+    const buttonBusca = screen.getByRole('button', { name: /buscar/i });
+    userEvent.click(radioFirstLetter);
+    userEvent.click(inputTextPesquisa);
+    const inputSearch = screen.getByRole('textbox');
+    expect(inputSearch).toBeInTheDocument();
+    userEvent.type(inputSearch, 'corba');
+    userEvent.click(buttonBusca);
   });
 });

@@ -62,7 +62,7 @@ function DetailMeal() {
             <span>
               <ShareAndFavoriteBtn
                 recipes={ meal }
-                testId={ ['share-btn', 'favorite-btn'] }
+                testId={ ['favorite-btn', 'share-btn'] }
               />
             </span>
           </h2>

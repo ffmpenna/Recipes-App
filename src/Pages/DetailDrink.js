@@ -69,7 +69,7 @@ function DetailDrink() {
             <span>
               <ShareAndFavoriteBtn
                 recipes={ drink }
-                testId={ ['share-btn', 'favorite-btn'] }
+                testId={ ['favorite-btn', 'share-btn'] }
               />
             </span>
           </h2>

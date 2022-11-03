@@ -8,6 +8,8 @@ function Profile() {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem('user'));
 
+  console.log(history.location.pathname);
+
   const redirectTo = (endpoint) => {
     if (endpoint === 'logout') {
       localStorage.clear();

@@ -15,19 +15,21 @@ export default function SearchBar({ page }) {
 
   return (
     <div>
-      <label htmlFor="radioBtn">
+      <label htmlFor="searchFilterIngredients">
         <input
           data-testid="ingredient-search-radio"
           type="radio"
+          id="searchFilterIngredients"
           value="ingredient"
           name="radioBtn"
           onChange={ handleChange }
         />
         Ingredientes
       </label>
-      <label htmlFor="radioBtn">
+      <label htmlFor="searchFilterName">
         <input
           data-testid="name-search-radio"
+          id="searchFilterName"
           name="radioBtn"
           value="name"
           type="radio"
@@ -35,8 +37,9 @@ export default function SearchBar({ page }) {
         />
         Nome
       </label>
-      <label htmlFor="radioBtn">
+      <label htmlFor="searchFilterLetter">
         <input
+          id="searchFilterLetter"
           name="radioBtn"
           value="first-letter"
           data-testid="first-letter-search-radio"

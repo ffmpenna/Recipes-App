@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
-import Provider from './context/Provider';
 import DetailDrink from './Pages/DetailDrink';
 import DetailMeal from './Pages/DetailMeal';
 import DoneRecipes from './Pages/DoneRecipes';

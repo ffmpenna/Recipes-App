@@ -5,15 +5,6 @@ import { act } from 'react-dom/test-utils';
 import App from '../App';
 import renderWithProvider from './helper/renderWithProvider';
 
-const mockHistoryPush = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
-
 describe('Testa a tela de Login', () => {
   const EMAIL_INPUT = 'email-input';
   const PASSWORD_INPUT = 'password-input';
@@ -21,11 +12,11 @@ describe('Testa a tela de Login', () => {
 
   beforeEach(() => {
     act(() => {
-      renderWithProvider(<App />, 'meals');
+      renderWithProvider(<App />);
     });
   });
 
-  test('Testa se os componentes do header estão sendo renderizados', () => {
+  test('Testa se os componentes do login estão sendo renderizados', () => {
     const emailInput = screen.getByTestId(EMAIL_INPUT);
     const passwordInput = screen.getByTestId(PASSWORD_INPUT);
     const submitBtn = screen.getByTestId(SUBMIT_BTN);
@@ -73,7 +64,5 @@ describe('Testa a tela de Login', () => {
     userEvent.type(emailInput, validEmail);
     userEvent.type(passwordInput, validPassword);
     userEvent.click(submitBtn);
-
-    expect(mockHistoryPush).toHaveBeenCalledWith('/meals');
   });
 });

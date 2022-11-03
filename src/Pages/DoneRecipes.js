@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import DoneCard from '../Components/DoneCard';
 import Header from '../Components/Header';
 import MyContext from '../context/MyContext';
@@ -6,8 +7,11 @@ import { readDone } from '../services/saveProgressOfRecipes';
 // import PropTypes from 'prop-types'
 
 function DoneRecipes() {
+  const history = useHistory();
   const { handleChange, loginInfo } = useContext(MyContext);
   const doneRecipes = readDone();
+
+  console.log(history.location.pathname);
 
   return (
     <div>

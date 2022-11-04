@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import MyContext from '../context/MyContext';
 import { addDone } from '../services/saveProgressOfRecipes';
@@ -51,15 +52,16 @@ function FinishButton({ type, recipe }) {
   };
 
   return (
-    <button
+    <Button
       className="button footer-container"
       type="button"
       data-testid="finish-recipe-btn"
       disabled={ !isFinished }
       onClick={ handleClick }
+      variant="warning"
     >
       Finish
-    </button>
+    </Button>
   );
 }
 

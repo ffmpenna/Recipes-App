@@ -7,7 +7,7 @@ import SearchBar from '../Components/SearchBar';
 
 function Meals() {
   return (
-    <div>
+    <div className="with-header">
       <Header title="Meals" />
       <SearchBar page="meals" />
       <Recipes page="meals" />

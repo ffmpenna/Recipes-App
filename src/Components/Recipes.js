@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Button, Container, Form } from 'react-bootstrap';
 import MyContext from '../context/MyContext';
 import RecipeCard from './RecipeCard';
 
 function Recipes({ page }) {
-  const history = useHistory();
-
   const {
-    isFilterOn,
     recipes,
     categories,
     setCategories,
@@ -31,9 +28,12 @@ function Recipes({ page }) {
       id: type === 'meals' ? 'idMeal' : 'idDrink',
       name: type === 'meals' ? 'strMeal' : 'strDrink',
       thumb: type === 'meals' ? 'strMealThumb' : 'strDrinkThumb',
+      instructions: 'strInstructions',
     };
 
-    const { name, thumb, id } = attributes;
+    console.log(array);
+
+    const { name, thumb, id, instructions } = attributes;
 
     return array
       .filter((_e, i) => i < quantity)
@@ -45,6 +45,7 @@ function Recipes({ page }) {
           img={ recipe[thumb] }
           type={ type }
           id={ recipe[id] }
+          instructions={ recipe[instructions] }
         />
       ));
   };
@@ -60,14 +61,17 @@ function Recipes({ page }) {
   };
 
   return (
-    <div>
-      <div>
+    <Container>
+      <h3 className="h6">Categories</h3>
+      <Form className="d-flex flex-wrap mm-3">
         {categories.allCategories[page]
           && categories.allCategories[page]
             .filter((_e, i) => i < LENGTH)
             .map((category, index) => (
-              <label htmlFor={ `${category}${index}` } key={ index }>
-                <input
+              <div key={ index }>
+                <Form.Check
+                  inline
+                  label={ category.strCategory }
                   data-testid={ `${category.strCategory}-category-filter` }
                   type="radio"
                   id={ `${category}${index}` }
@@ -75,44 +79,28 @@ function Recipes({ page }) {
                   value={ category.strCategory }
                   onClick={ selectCategory }
                 />
-                {category.strCategory}
-              </label>
+              </div>
             ))}
+        <Form.Check
+          inline
+          label="All"
+          data-testid="All-category-filter"
+          type="radio"
+          id="all"
+          name="category"
+          value="all"
+          onClick={ selectCategory }
+        />
+      </Form>
+      <div className="d-flex flex-column align-items-center">
+        <h1 className="h1 mt-3 mb-3">Recipes</h1>
+        {recipes.meals && page === 'meals' ? (
+          <div>{displayCards(recipes.meals, 'meals', MAX_DISPLAY)}</div>
+        ) : (
+          <div>{displayCards(recipes.drinks, 'drinks', MAX_DISPLAY)}</div>
+        )}
       </div>
-      <button
-        className="button"
-        data-testid="All-category-filter"
-        type="button"
-        onClick={ async () => fetchRecipesByCategory(page, 'all') }
-      >
-        All
-      </button>
-      {isFilterOn ? (
-        <div>
-          <h1>filtro on</h1>
-          <div>
-            {recipes[page] ? (
-              displayCards(recipes[page], page, MAX_DISPLAY)
-            ) : (
-              <h1>Carregando...</h1>
-            )}
-            {recipes.drinks.length === 1
-              && history.push(`/drinks/${recipes.drinks[0].idDrink}`)}
-            {recipes.meals.length === 1
-              && history.push(`/meals/${recipes.meals[0].idMeal}`)}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1>filtro off</h1>
-          {recipes.meals && page === 'meals' ? (
-            <div>{displayCards(recipes.meals, 'meals', MAX_DISPLAY)}</div>
-          ) : (
-            <div>{displayCards(recipes.drinks, 'drinks', MAX_DISPLAY)}</div>
-          )}
-        </div>
-      )}
-    </div>
+    </Container>
   );
 }
 

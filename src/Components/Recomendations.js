@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect } from 'react';
+import { Carousel } from 'react-bootstrap';
 import MyContext from '../context/MyContext';
 
 function Recomendations({ type }) {
@@ -20,25 +21,48 @@ function Recomendations({ type }) {
 
   const { name, thumb } = attributes;
 
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
   return (
-    <div>
-      <h1 className="header">Recomendações</h1>
-      <div className="horizontal-slider">
-        <div className="slider-container">
-          {recipes[type]
-            .filter((_e, i) => i < SIX)
-            .map((recom, i) => (
-              <div
-                className="item"
-                data-testid={ `${i}-recommendation-card` }
-                key={ recom[name] }
-              >
-                <h3 data-testid={ `${i}-recommendation-title` }>{recom[name]}</h3>
-                <img className="images" src={ recom[thumb] } alt={ recom[thumb] } />
-              </div>
-            ))}
-        </div>
-      </div>
+    <div
+      style={ {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      } }
+    >
+      <h1 className="header">Recomendations</h1>
+      <Carousel
+        className="horizontal-slider carousel"
+        style={ { width: '400px' } }
+      >
+        {shuffle(recipes[type])
+          .filter((_e, i) => i < SIX)
+          .map((recom, i) => (
+            <Carousel.Item
+              className="item"
+              data-testid={ `${i}-recommendation-card` }
+              key={ recom[name] }
+            >
+              <Carousel.Caption className="carousel-caption">
+                <h3 className="h3">{recom[name]}</h3>
+              </Carousel.Caption>
+              <img
+                className="images"
+                width="100%"
+                src={ recom[thumb] }
+                alt={ recom[thumb] }
+              />
+            </Carousel.Item>
+          ))}
+      </Carousel>
+      <div className="clear" />
     </div>
   );
 }

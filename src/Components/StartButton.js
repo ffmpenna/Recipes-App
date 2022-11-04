@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { readInProgress } from '../services/saveProgressOfRecipes';
 
@@ -17,14 +18,15 @@ function StartButton({ type }) {
   };
 
   return (
-    <button
+    <Button
       className="button footer-container"
       type="button"
       data-testid="start-recipe-btn"
       onClick={ handleClick }
+      variant="warning"
     >
       {isStarted ? 'Continue Recipe' : 'Start Recipe'}
-    </button>
+    </Button>
   );
 }
 

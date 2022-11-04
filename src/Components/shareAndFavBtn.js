@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Badge, Button, Stack } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
@@ -68,34 +69,45 @@ function ShareAndFavoriteBtn({ recipes, testId, page, hideCard, type }) {
   }, [isCheck, recipes]);
 
   return (
-    <div>
-      <button
-        type="button"
-        data-testid={ testId[1] }
-        src={ shareIcon }
-        onClick={ clipboardLink }
-      >
-        <img src={ shareIcon } alt="share-btn" />
-      </button>
-      {page !== 'doneRecipes' && (
-        <button
-          type="button"
-          onClick={ handleFavorite }
-          src={ isCheck ? blackHeartIcon : whiteHeartIcon }
+    <div className="mb-2 mt-2">
+      <Stack direction="horizontal" gap={ 3 }>
+        <Button
+          type="Button"
+          data-testid={ testId[1] }
+          onClick={ clipboardLink }
+          variant="warning"
+          size="sm"
         >
-          {isCheck ? (
-            <img src={ blackHeartIcon } alt="favorite" data-testid={ testId[0] } />
-          ) : (
-            <img src={ whiteHeartIcon } alt="favorite" data-testid={ testId[0] } />
-          )}
-        </button>
-      )}
+          <img width="20px" src={ shareIcon } alt="share-btn" />
+        </Button>
+        {page !== 'doneRecipes' && (
+          <Button
+            type="Button"
+            onClick={ handleFavorite }
+            src={ isCheck ? blackHeartIcon : whiteHeartIcon }
+            variant="warning"
+            size="sm"
+          >
+            {isCheck ? (
+              <img
+                src={ blackHeartIcon }
+                width="20px"
+                alt="favorite"
+                data-testid={ testId[0] }
+              />
+            ) : (
+              <img
+                src={ whiteHeartIcon }
+                width="20px"
+                alt="favorite"
+                data-testid={ testId[0] }
+              />
+            )}
+          </Button>
+        )}
 
-      {isCopy && (
-        <div>
-          <p>Link copied!</p>
-        </div>
-      )}
+        {isCopy && <Badge bg="warning">Copied!</Badge>}
+      </Stack>
     </div>
   );
 }

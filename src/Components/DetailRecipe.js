@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
+import { Container, Navbar } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import '../App.css';
 import MyContext from '../context/MyContext';
@@ -39,7 +40,9 @@ function DetailRecipe({ type, page }) {
   }, []);
 
   return (
-    <div>
+    <Container
+      style={ { display: 'flex', flexDirection: 'column', alignItems: 'center' } }
+    >
       {detailRecipe ? (
         <div>
           <h2 data-testid="recipe-title">
@@ -59,31 +62,42 @@ function DetailRecipe({ type, page }) {
             src={ detailRecipe[thumb] }
             alt={ detailRecipe[name] }
           />
-          <p data-testid="recipe-category">{detailRecipe[category]}</p>
-          {(type === 'meals' && page !== 'in-progress') && (
+          <h5 className="h5" data-testid="recipe-category">
+            {`Category: ${detailRecipe[category]}`}
+          </h5>
+          {type === 'meals' && page !== 'in-progress' && (
             <RecipeVideo type={ type } recipe={ detailRecipe } />
           )}
+          <h3 className="h2">Instructions</h3>
           <p data-testid="instructions">{detailRecipe[instructions]}</p>
           {}
-
+          <h3 className="h2">Ingredients</h3>
           {page === 'in-progress' ? (
             <div>
               <CheckIngredientList recipe={ detailRecipe } type={ type } />
-              <div className="clear" />
-              <FinishButton type={ type } recipe={ detailRecipe } />
+              <Navbar
+                fixed="bottom"
+                className="nav-bar d-flex justify-content-center"
+              >
+                <FinishButton type={ type } recipe={ detailRecipe } />
+              </Navbar>
             </div>
           ) : (
             <div>
               <IngredientList recipe={ detailRecipe } />
-              <div className="clear" />
-              <StartButton type={ type } />
+              <Navbar
+                fixed="bottom"
+                className="nav-bar d-flex justify-content-center"
+              >
+                <StartButton type={ type } />
+              </Navbar>
             </div>
           )}
         </div>
       ) : (
         <h1>Carregando...</h1>
       )}
-    </div>
+    </Container>
   );
 }
 

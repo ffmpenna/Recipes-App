@@ -10,15 +10,16 @@ function RecipeVideo({ type, recipe }) {
   const { name, youtube } = attributes;
 
   return (
-    <iframe
-      height="480px"
-      width="640px"
-      data-testid="video"
-      title={ recipe[name] }
-      src={ recipe[youtube] }
-    >
-      Video
-    </iframe>
+    <div>
+      <h3 className="h2">Video</h3>
+      <iframe
+        data-testid="video"
+        title={ recipe[name] }
+        src={ recipe[youtube] }
+      >
+        Video
+      </iframe>
+    </div>
   );
 }
 

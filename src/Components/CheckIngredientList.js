@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { getIngredients } from '../services/ingredientsHelpers';
 import { addInProgress } from '../services/saveProgressOfRecipes';
@@ -9,7 +10,9 @@ function CheckIngredientList({ recipe, type }) {
   const { ingredients, measure } = getIngredients(recipe);
 
   useEffect(() => {
-    const inProgressStorage = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const inProgressStorage = JSON.parse(
+      localStorage.getItem('inProgressRecipes'),
+    );
     if (!inProgressStorage) {
       localStorage.setItem(
         'inProgressRecipes',
@@ -21,19 +24,22 @@ function CheckIngredientList({ recipe, type }) {
     }
   }, []);
 
-  return ingredients.map((ingredient, index) => (
-    <ul key={ index }>
-      <li>
-        <Checkbox
-          index={ index }
-          ingredient={ ingredient }
-          recipe={ recipe }
-          measure={ measure }
-          type={ type }
-        />
-      </li>
-    </ul>
-  ));
+  return (
+    <Container>
+      {ingredients.map((ingredient, index) => (
+        <li className="mb-3" key={ index }>
+          <Checkbox
+            index={ index }
+            ingredient={ ingredient }
+            recipe={ recipe }
+            measure={ measure }
+            type={ type }
+          />
+        </li>
+      ))}
+      <div className="clear" />
+    </Container>
+  );
 }
 
 export default CheckIngredientList;

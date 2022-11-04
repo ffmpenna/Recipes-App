@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Navbar, Stack } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import '../App.css';
 import drinkIcon from '../images/drinkIcon.svg';
@@ -17,31 +18,31 @@ function Footer() {
   };
 
   return (
-    <div>
+    <Navbar className="nav-bar" fixed="bottom">
       <div className="clear" />
-      <footer className="footer-container" data-testid="footer">
-        <div className="footer-content">
-          <button
-            onClick={ redirectDrink }
-            type="button"
-            data-testid="drinks-bottom-btn"
-            src={ drinkIcon }
-          >
-            <img src={ drinkIcon } alt="drink-icon" />
-          </button>
-          <button
-            onClick={ redirectMeal }
-            type="button"
-            data-testid="meals-bottom-btn"
-            src={ mealIcon }
-          >
-            <img src={ mealIcon } alt="meal-icon" />
-          </button>
-          {redirectDrinks && <Redirect to="/drinks" />}
-          {redirectMeals && <Redirect to="/meals" />}
-        </div>
-      </footer>
-    </div>
+      <Stack className="mx-auto" direction="horizontal" gap={ 2 }>
+        <Button
+          onClick={ redirectDrink }
+          type="button"
+          data-testid="drinks-bottom-btn"
+          src={ drinkIcon }
+          variant="warning"
+        >
+          <img src={ drinkIcon } alt="drink-icon" />
+        </Button>
+        <Button
+          onClick={ redirectMeal }
+          type="button"
+          data-testid="meals-bottom-btn"
+          src={ mealIcon }
+          variant="warning"
+        >
+          <img src={ mealIcon } alt="meal-icon" />
+        </Button>
+        {redirectDrinks && <Redirect to="/drinks" />}
+        {redirectMeals && <Redirect to="/meals" />}
+      </Stack>
+    </Navbar>
   );
 }
 

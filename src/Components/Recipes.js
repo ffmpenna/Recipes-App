@@ -61,7 +61,7 @@ function Recipes({ page }) {
   };
 
   return (
-    <Container>
+    <Container className="container">
       <h3 className="h6">Categories</h3>
       <Form className="d-flex flex-wrap mm-3">
         {categories.allCategories[page]

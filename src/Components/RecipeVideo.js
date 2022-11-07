@@ -15,7 +15,7 @@ function RecipeVideo({ type, recipe }) {
       <iframe
         data-testid="video"
         title={ recipe[name] }
-        src={ recipe[youtube] }
+        src={ recipe[youtube] && recipe[youtube].replace('watch?v=', 'embed/') }
       >
         Video
       </iframe>

@@ -60,6 +60,10 @@ body {
     -1px 1px 0 rgb(80, 80, 80), 1px 1px 0 rgb(80, 80, 80);
 }
 
-.ingredient-check{
-  text-decoration: line-through solid black
+.ingredient-check {
+  text-decoration: line-through solid black;
+}
+
+.container {
+  max-width: 50vw;
 }

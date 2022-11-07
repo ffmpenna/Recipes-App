@@ -15,7 +15,7 @@ export default function SearchBar({ page }) {
   };
 
   return (
-    <Container className="mt-4 container">
+    <Container className="container">
       <h2 className="h6">Search Filters</h2>
       <Form>
         <Form.Check

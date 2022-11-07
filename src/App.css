@@ -3,7 +3,7 @@ body {
 }
 
 .with-header {
-  padding: 75px 0;
+  padding: 100px 0;
 }
 
 .clear {
@@ -41,10 +41,6 @@ body {
   color: white;
   text-transform: uppercase;
 }
-
-/* .nav-bar .button {
-  background-color: aliceblue;
-} */
 
 .carousel {
   width: 50vw;

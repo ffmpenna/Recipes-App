@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import { Container, Form } from 'react-bootstrap';
 import MyContext from '../context/MyContext';
 import RecipeCard from './RecipeCard';
 

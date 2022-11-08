@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Card, Container, Stack } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import ShareAndFavoriteBtn from './shareAndFavBtn';
 

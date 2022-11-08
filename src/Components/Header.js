@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import { Button, Container, Form, Image, Navbar } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
@@ -61,9 +62,9 @@ function Header({ title, withoutSearch }) {
   );
 }
 
-// Header.propTypes = {
-//   title: PropTypes.string,
-//   withoutSearch: PropTypes.bool,
-// }.isRequired;
+Header.propTypes = {
+  title: PropTypes.string,
+  withoutSearch: PropTypes.bool,
+}.isRequired;
 
 export default Header;

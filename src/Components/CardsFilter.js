@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { Form } from 'react-bootstrap';
 import MyContext from '../context/MyContext';
@@ -42,5 +42,9 @@ function CardsFilter({ type }) {
     </Form>
   );
 }
+
+CardsFilter.propTypes = {
+  type: PropTypes.string,
+}.isRequired;
 
 export default CardsFilter;

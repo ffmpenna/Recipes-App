@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
@@ -75,3 +74,8 @@ export default function DoneCard({ recipe, index }) {
     </Container>
   );
 }
+
+DoneCard.propTypes = {
+  recipe: PropTypes.shape({}),
+  index: PropTypes.number,
+}.isRequired;

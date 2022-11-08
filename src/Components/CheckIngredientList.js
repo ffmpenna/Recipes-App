@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
@@ -41,5 +42,10 @@ function CheckIngredientList({ recipe, type }) {
     </Container>
   );
 }
+
+CheckIngredientList.propTypes = {
+  recipe: PropTypes.shape({}),
+  type: PropTypes.string,
+}.isRequired;
 
 export default CheckIngredientList;
